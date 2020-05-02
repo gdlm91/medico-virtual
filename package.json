@@ -9,7 +9,7 @@
         "eject": "react-scripts eject",
         "storybook": "start-storybook -p 9009 -s public",
         "build-storybook": "build-storybook -s public",
-        "lint": "eslint '*/**/*.{ts,tsx}' --fix",
+        "lint": "eslint src/**/*.{ts,tsx} --fix",
         "format": "prettier --write src/**/*.{ts,tsx,css}",
         "allgood": "npm run format && npm run lint && npm run build"
     },
@@ -21,10 +21,15 @@
         "@types/node": "^12.0.0",
         "@types/react": "^16.9.0",
         "@types/react-dom": "^16.9.0",
+        "antd": "^4.2.0",
+        "moment": "2.24.0",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
         "react-scripts": "3.4.1",
         "typescript": "~3.7.2"
+    },
+    "resolutions": {
+        "moment": "2.24.0"
     },
     "husky": {
         "hooks": {
