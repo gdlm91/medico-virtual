@@ -9,7 +9,7 @@
         "eject": "react-scripts eject",
         "storybook": "start-storybook -p 9009 -s public",
         "build-storybook": "build-storybook -s public",
-        "lint": "eslint */**/*.{ts,tsx} --fix",
+        "lint": "eslint src/**/*.{ts,tsx} --fix",
         "format": "prettier --write src/**/*.{ts,tsx,css}",
         "allgood": "npm run format && npm run lint && npm run build"
     },
