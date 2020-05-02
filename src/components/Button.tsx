@@ -1,23 +1,18 @@
-import * as React from 'react';
+import React from 'react';
+import { Button } from 'antd';
+import './Button.css';
 
-export interface ButtonProps {
-    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+interface Props {
+    disabled?: boolean;
+    onClick: () => void;
 }
 
-const styles = {
-    border: '1px solid #eee',
-    borderRadius: 3,
-    backgroundColor: '#B0B0B0',
-    cursor: 'pointer',
-    fontSize: 15,
-    padding: '3px 10px',
-    margin: 10,
-};
-
-const Button: React.FC<ButtonProps> = (props) => (
-    <button onClick={props.onClick} style={styles} type="button">
-        {props.children}
-    </button>
+const PrimaryButton: React.FC<Props> = (props) => (
+    <Button type="primary" disabled={props.disabled} onClick={props.onClick}>
+        Button
+    </Button>
 );
 
-export default Button;
+PrimaryButton.defaultProps = { disabled: false };
+
+export default PrimaryButton;
