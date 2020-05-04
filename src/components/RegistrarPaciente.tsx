@@ -31,6 +31,10 @@ const RegistrarPaciente: React.FC = () => {
         </Button>,
     ];
 
+    const validateMessages = {
+        required: '${label} es requerido',
+    };
+
     return (
         <React.Fragment>
             <Button type="primary" onClick={showModal}>
@@ -43,14 +47,20 @@ const RegistrarPaciente: React.FC = () => {
                 onCancel={handleCancel}
                 footer={footer}
             >
-                <Form form={form} onFinish={onFinish} layout="vertical" name="basic">
-                    <Form.Item label="Nombres y Apellidos" name="nombreCompleto">
+                <Form
+                    form={form}
+                    onFinish={onFinish}
+                    layout="vertical"
+                    name="basic"
+                    validateMessages={validateMessages}
+                >
+                    <Form.Item label="Nombres y Apellidos" name="nombreCompleto" rules={[{ required: true }]}>
                         <Input />
                     </Form.Item>
 
                     <Row gutter={16}>
                         <Col span={12}>
-                            <Form.Item label="Pais" name="pais">
+                            <Form.Item label="Pais" name="pais" rules={[{ required: true }]}>
                                 <Select>
                                     <OptGroup>
                                         <Option value="jack">Colombia</Option>
@@ -63,24 +73,28 @@ const RegistrarPaciente: React.FC = () => {
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item label="Documento" name="documento">
+                            <Form.Item label="Documento" name="documento" rules={[{ required: true }]}>
                                 <Input />
                             </Form.Item>
                         </Col>
                     </Row>
                     <Row gutter={16}>
                         <Col span={12}>
-                            <Form.Item label="Fecha de nacimiento" name="fechaDeNacimiento">
+                            <Form.Item
+                                label="Fecha de nacimiento"
+                                name="fechaDeNacimiento"
+                                rules={[{ required: true }]}
+                            >
                                 <DatePicker style={{ width: '100%' }} />
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item label="Numero telefónico" name="numeroTelefonico">
+                            <Form.Item label="Numero telefónico" name="numeroTelefonico" rules={[{ required: true }]}>
                                 <Input />
                             </Form.Item>
                         </Col>
                     </Row>
-                    <Form.Item label="Correo electronico" name="correoElectronico">
+                    <Form.Item label="Correo electronico" name="correoElectronico" rules={[{ required: true }]}>
                         <Input />
                     </Form.Item>
                 </Form>
