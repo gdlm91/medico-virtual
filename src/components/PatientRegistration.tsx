@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import 'antd/dist/antd.css';
 import { Button, Modal, Row, Col, Input, Select, Form, DatePicker } from 'antd';
 
 import './PatientRegistration.css';
