@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Row, Col, Input, Select, Form, DatePicker } from 'antd';
-import 'antd/dist/antd.css';
 
 const PatientDetails: React.FC = () => {
     const { Option, OptGroup } = Select;
