@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import { Button, Modal, Row, Col, Input, Select, Form, DatePicker } from 'antd';
 
-import './RegistrarPaciente.css';
+import './PatientRegistration.css';
 
-const RegistrarPaciente: React.FC = () => {
+const PatientRegistration: React.FC = () => {
     const [visible, setVisible] = useState(false);
     const { Option, OptGroup } = Select;
 
@@ -63,11 +63,11 @@ const RegistrarPaciente: React.FC = () => {
                             <Form.Item label="Pais" name="pais" rules={[{ required: true }]}>
                                 <Select>
                                     <OptGroup>
-                                        <Option value="jack">Colombia</Option>
-                                        <Option value="lucy">Venezuela</Option>
+                                        <Option value="Colombia">Colombia</Option>
+                                        <Option value="Venezuela">Venezuela</Option>
                                     </OptGroup>
                                     <OptGroup>
-                                        <Option value="Yiminghe">yiminghe</Option>
+                                        <Option value="Otro">Otro</Option>
                                     </OptGroup>
                                 </Select>
                             </Form.Item>
@@ -103,4 +103,4 @@ const RegistrarPaciente: React.FC = () => {
     );
 };
 
-export default RegistrarPaciente;
+export default PatientRegistration;
