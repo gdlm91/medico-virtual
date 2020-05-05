@@ -8,7 +8,7 @@ const PatientDetails: React.FC = () => {
     const onFinish = (values: {}) => {
         console.log(values);
     };
-    const handleOk = () => {
+    const handleSave = () => {
         form.submit();
     };
 
@@ -112,7 +112,7 @@ const PatientDetails: React.FC = () => {
                     </Col>
                 </Row>
             </Form>
-            <Button key="Guardar" type="primary" onClick={handleOk}>
+            <Button key="Guardar" type="primary" onClick={handleSave}>
                 Guardar
             </Button>
         </React.Fragment>
