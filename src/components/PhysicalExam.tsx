@@ -22,9 +22,6 @@ const PhysicalExam: React.FC = () => {
         <>
             <Form layout="vertical" onFinish={console.log}>
                 <SelectList name="examenFisico" label="Examen fisico" options={options}></SelectList>,
-                <Button type="primary" htmlType="submit">
-                    Submit
-                </Button>
             </Form>
         </>
     );

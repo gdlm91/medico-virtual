@@ -1,22 +1,12 @@
 import React from 'react';
 import { Form, Button } from 'antd';
 import SelectList from './SelectList';
+import './Downloadables.css';
 
 const Downloadables: React.FC = () => {
     const options = {
-        piel: 'Piel',
-        cabeza: 'Cabeza',
-        Otorrinolaringologia: 'Otorrinolaringologia',
-        Ojos: 'Ojos',
-        Cuello: 'Cuello',
-        Torax: 'Torax',
-        Mamas: 'Mamas',
-        Cardiovascular: 'Cardiovascular',
-        Abdomen: 'Abdomen',
-        Genital: 'Genital',
-        Extremidades: 'Extremidades',
-        Neurologico: 'Neurologico',
-        NiegaRevisionPorSistema: 'NiegaRevisionPorSistema',
+        reposo: 'Reposo',
+        recetaMedica: 'Receta medica',
     };
 
     return (
@@ -25,11 +15,10 @@ const Downloadables: React.FC = () => {
                 name="descargables"
                 label="Descargable"
                 options={options}
-                showDates={(value) => value == 'piel'}
+                showDates={(value) => value == 'reposo'}
             ></SelectList>
-
-            <Button htmlType="submit" type="primary">
-                Submit
+            <Button block htmlType="submit" type="primary" className="button-pdf">
+                Exportar a PDF
             </Button>
         </Form>
     );

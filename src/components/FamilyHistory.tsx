@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Table } from 'antd';
+import { Form, Table, Pagination } from 'antd';
 import SelectList from './SelectList';
 import './PersonalHistory.css';
 
