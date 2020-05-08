@@ -62,7 +62,7 @@ const FillAppointment: React.FC<RouteComponentProps> = () => {
                 </TabPane>
             </Tabs>
             <Row justify="end" className="button-next">
-                <Button>Proximo</Button>
+                <Button>Siguiente</Button>
             </Row>
         </div>
     );
