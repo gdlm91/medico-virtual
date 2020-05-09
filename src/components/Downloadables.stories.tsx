@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Downloadables from './Downloadables';
 
 export default {
