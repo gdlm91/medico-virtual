@@ -12,6 +12,7 @@ import Diagnosis from './components/Diagnosis';
 import Treatment from './components/Treatment';
 import Downloadables from './components/Downloadables';
 import './FillAppointment.css';
+import VitalSigns from './components/VitalSigns';
 
 const FillAppointment: React.FC<RouteComponentProps> = () => {
     const { TabPane } = Tabs;
@@ -46,7 +47,7 @@ const FillAppointment: React.FC<RouteComponentProps> = () => {
                     <FamilyHistory />
                 </TabPane>
                 <TabPane className="fill-appointment-tab-container" tab="Signos vitales" key={'7'}>
-                    Signos vitales
+                    <VitalSigns />
                 </TabPane>
                 <TabPane className="fill-appointment-tab-container" tab="Exámen fisico" key={'8'}>
                     <PhysicalExam />
