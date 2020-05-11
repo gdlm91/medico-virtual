@@ -2,7 +2,7 @@ import React from 'react';
 import { RouteComponentProps } from '@reach/router';
 
 const History: React.FC<RouteComponentProps> = () => {
-    return <p>Hola soy historiaaa!</p>;
+    return <p>holis!!</p>;
 };
 
 export default History;

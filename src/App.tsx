@@ -6,6 +6,7 @@ import './App.css';
 import History from './History';
 import Agenda from './Agenda';
 import DoctorProfile from './DoctorProfile';
+import FillAppointment from './FillAppointment';
 
 function App() {
     const { Header, Content, Footer } = Layout;
@@ -47,6 +48,7 @@ function App() {
                         <Agenda path="/" />
                         <History path="/history" />
                         <DoctorProfile path="/doctorProfile" />
+                        <FillAppointment path="/appointment/:key" />
                     </Router>
                 </div>
             </Content>

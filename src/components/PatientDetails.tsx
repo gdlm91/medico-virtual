@@ -1,15 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Row, Col, Input, Select, Form, DatePicker } from 'antd';
+import { differenceInYears } from 'date-fns';
+import { Moment } from 'moment';
 
 const PatientDetails: React.FC = () => {
-    const { Option, OptGroup } = Select;
     const [form] = Form.useForm();
+    const [age, setAge] = useState(0);
+    const { Option, OptGroup } = Select;
+
+    useEffect(() => {
+        form.setFieldsValue({ edad: age });
+    }, [age]);
 
     const onFinish = (values: {}) => {
         console.log(values);
     };
-    const handleSave = () => {
-        form.submit();
+
+    const handleBirthdayChange = (date: Moment | null, dateString: string) => {
+        const ageResult = differenceInYears(new Date(), new Date(dateString));
+        setAge(ageResult);
     };
 
     return (
@@ -43,12 +52,12 @@ const PatientDetails: React.FC = () => {
                 <Row gutter={16}>
                     <Col span={6}>
                         <Form.Item label="Fecha de nacimiento" name="fechaDeNacimiento" rules={[{ required: true }]}>
-                            <DatePicker style={{ width: '100%' }} />
+                            <DatePicker onChange={handleBirthdayChange} style={{ width: '100%' }} />
                         </Form.Item>
                     </Col>
                     <Col span={6}>
                         <Form.Item label="Edad" name="edad">
-                            <Input />
+                            <Input disabled />
                         </Form.Item>
                     </Col>
                     <Col span={6}>
@@ -112,7 +121,7 @@ const PatientDetails: React.FC = () => {
                     </Col>
                 </Row>
             </Form>
-            <Button key="Guardar" type="primary" onClick={handleSave}>
+            <Button key="Guardar" type="primary" htmlType="submit">
                 Guardar
             </Button>
         </React.Fragment>
