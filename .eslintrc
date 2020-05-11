@@ -19,7 +19,7 @@
         "no-console": [
             "warn",
             {
-                "allow": ["warn", "error"]
+                "allow": ["warn", "error", "debug"]
             }
         ],
         "no-plusplus": "off",

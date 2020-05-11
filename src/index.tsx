@@ -5,9 +5,10 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>,
+    // disabling for Ant design bug in console: https://github.com/ant-design/ant-design/issues/22493
+    // <React.StrictMode>
+    <App />,
+    // </React.StrictMode>,
     document.getElementById('root'),
 );
 
