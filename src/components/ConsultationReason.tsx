@@ -6,16 +6,14 @@ const ConsultationReason: React.FC = () => {
     const [form] = Form.useForm();
 
     return (
-        <React.Fragment>
-            <Form form={form} layout="vertical" name="basic">
-                <Form.Item label="Motivo de consulta" name="motivoDeConsulta">
-                    <TextArea autoSize={{ minRows: 5, maxRows: 5 }} />
-                </Form.Item>
-                <Form.Item label="Enfermedad actual" name="enfermedadActual">
-                    <TextArea autoSize={{ minRows: 5, maxRows: 5 }} />
-                </Form.Item>
-            </Form>
-        </React.Fragment>
+        <Form form={form} layout="vertical" name="basic">
+            <Form.Item label="Motivo de consulta" name="motivoDeConsulta">
+                <TextArea autoSize={{ minRows: 5, maxRows: 5 }} />
+            </Form.Item>
+            <Form.Item label="Enfermedad actual" name="enfermedadActual">
+                <TextArea autoSize={{ minRows: 5, maxRows: 5 }} />
+            </Form.Item>
+        </Form>
     );
 };
 

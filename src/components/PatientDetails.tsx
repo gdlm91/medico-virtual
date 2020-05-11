@@ -16,7 +16,7 @@ const PatientDetails: React.FC = () => {
         console.log(values);
     };
 
-    const handleSaveDate = (date: Moment | null, dateString: string) => {
+    const handleBirthdayChange = (date: Moment | null, dateString: string) => {
         const ageResult = differenceInYears(new Date(), new Date(dateString));
         setAge(ageResult);
     };
@@ -52,7 +52,7 @@ const PatientDetails: React.FC = () => {
                 <Row gutter={16}>
                     <Col span={6}>
                         <Form.Item label="Fecha de nacimiento" name="fechaDeNacimiento" rules={[{ required: true }]}>
-                            <DatePicker onChange={handleSaveDate} style={{ width: '100%' }} />
+                            <DatePicker onChange={handleBirthdayChange} style={{ width: '100%' }} />
                         </Form.Item>
                     </Col>
                     <Col span={6}>

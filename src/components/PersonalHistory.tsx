@@ -64,7 +64,7 @@ const PersonalHistory: React.FC = () => {
             <Form layout="vertical">
                 <SelectList name="antecedentesPersonales" label="Antecedente" options={options}></SelectList>
             </Form>
-            <div className="table">
+            <div className="personal-history-table">
                 <Table columns={columns} dataSource={data} size="small" />
             </div>
         </>

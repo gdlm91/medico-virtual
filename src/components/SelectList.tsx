@@ -18,31 +18,29 @@ const SelectList: React.FC<Props> = ({ options, name, label }) => {
             {(fields, { add, remove }) => (
                 <>
                     {fields.map((field) => (
-                        <>
-                            <Row gutter={16} key={field.key}>
-                                <Col span={8}>
-                                    <Form.Item label={label} name={[field.name, label.toLowerCase()]}>
-                                        <Select>
-                                            {Object.entries(options).map(([value, label]) => (
-                                                <Option key={value} value={value}>
-                                                    {label}
-                                                </Option>
-                                            ))}
-                                        </Select>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={14}>
-                                    <Form.Item label="Observación" name={[field.name, 'observacion']}>
-                                        <TextArea autoSize={{ minRows: 5, maxRows: 5 }} />
-                                    </Form.Item>
-                                </Col>
-                                <Col className="dynamic-delete-button">
-                                    <Button type="dashed" danger onClick={() => remove(field.name)}>
-                                        <DeleteOutlined />
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </>
+                        <Row gutter={16} key={field.key}>
+                            <Col span={8}>
+                                <Form.Item label={label} name={[field.name, label.toLowerCase()]}>
+                                    <Select>
+                                        {Object.entries(options).map(([value, label]) => (
+                                            <Option key={value} value={value}>
+                                                {label}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+                            <Col span={14}>
+                                <Form.Item label="Observación" name={[field.name, 'observacion']}>
+                                    <TextArea autoSize={{ minRows: 5, maxRows: 5 }} />
+                                </Form.Item>
+                            </Col>
+                            <Col className="dynamic-delete-button">
+                                <Button type="dashed" danger onClick={() => remove(field.name)}>
+                                    <DeleteOutlined />
+                                </Button>
+                            </Col>
+                        </Row>
                     ))}
 
                     <Button block type="dashed" onClick={() => add()}>

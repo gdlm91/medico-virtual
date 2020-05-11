@@ -18,7 +18,7 @@ const FillAppointment: React.FC<RouteComponentProps> = () => {
     const { TabPane } = Tabs;
 
     return (
-        <div>
+        <>
             <Row className="titulo-name">
                 <Col span={6}>
                     <h1>Nombre del Paciente</h1>
@@ -65,7 +65,7 @@ const FillAppointment: React.FC<RouteComponentProps> = () => {
             <Row justify="end" className="button-next">
                 <Button>Siguiente</Button>
             </Row>
-        </div>
+        </>
     );
 };
 

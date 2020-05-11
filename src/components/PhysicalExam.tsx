@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form } from 'antd';
+import { Form } from 'antd';
 import SelectList from './SelectList';
 
 const PhysicalExam: React.FC = () => {
@@ -19,11 +19,9 @@ const PhysicalExam: React.FC = () => {
         Neurologico: 'Neurologico',
     };
     return (
-        <>
-            <Form layout="vertical" onFinish={console.log}>
-                <SelectList name="examenFisico" label="Examen fisico" options={options}></SelectList>,
-            </Form>
-        </>
+        <Form layout="vertical" onFinish={console.log}>
+            <SelectList name="examenFisico" label="Examen fisico" options={options}></SelectList>,
+        </Form>
     );
 };
 
