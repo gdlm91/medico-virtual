@@ -8,6 +8,7 @@ import Agenda from './Agenda';
 import DoctorProfile from './DoctorProfile';
 import FillAppointment from './FillAppointment';
 import Api from './Api';
+import HistoryDetails from './HistoryDetails';
 
 function App() {
     const { Header, Content, Footer } = Layout;
@@ -24,8 +25,8 @@ function App() {
                             <Menu.Item key="agenda">
                                 <Link to="/">Agenda</Link>
                             </Menu.Item>
-                            <Menu.Item key="historia">
-                                <Link to="/history">Historia</Link>
+                            <Menu.Item key="stories">
+                                <Link to="/stories">Historia</Link>
                             </Menu.Item>
                             <Menu.Item key="usuarios">Usuarios</Menu.Item>
                             <Menu.Item key="reportes">Reportes</Menu.Item>
@@ -47,7 +48,9 @@ function App() {
                 <div className="site-layout-content">
                     <Router>
                         <Agenda path="/" />
-                        <History path="/history" />
+                        <History path="/stories">
+                            <HistoryDetails path=":$key" />
+                        </History>
                         <DoctorProfile path="/doctorProfile" />
                         <FillAppointment path="/appointment/:key" />
                         <Api path="/api" />
