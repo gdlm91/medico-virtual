@@ -29,7 +29,7 @@ const FillAppointment: React.FC<RouteComponentProps> = () => {
             </Row>
             <Tabs defaultActiveKey="1" tabPosition="left">
                 <TabPane className="fill-appointment-tab-container" tab="Datos personales" key={'1'}>
-                    <PatientDetails />
+                    <PatientDetails onFinish={console.log} />
                 </TabPane>
                 <TabPane className="fill-appointment-tab-container" tab="Motivo de Consulta" key={'2'}>
                     <ConsultationReason />
