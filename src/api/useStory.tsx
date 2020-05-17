@@ -28,6 +28,8 @@ const useStory = ($key: string): UseStory => {
                 return;
             }
 
+            console.log(patient);
+
             return update<Story>(Entities.story, $key, { ...response.data, patient });
         },
         response,

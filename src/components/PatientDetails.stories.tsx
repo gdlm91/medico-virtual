@@ -6,4 +6,4 @@ export default {
     component: PatientDetails,
 };
 
-export const Default = () => <PatientDetails />;
+export const Default = () => <PatientDetails onFinish={console.log} />;
