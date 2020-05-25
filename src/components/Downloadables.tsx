@@ -26,7 +26,7 @@ const SelectWithDate: React.FC<PropsWithField> = ({ options, label, showDates, f
     const { Option } = Select;
 
     const shouldShowDates = () => {
-        if (typeof showDates == 'function') {
+        if (typeof showDates === 'function') {
             return showDates(selectValue);
         }
 
@@ -104,7 +104,7 @@ const Downloadables: React.FC = () => {
                 name="descargables"
                 label="Descargable"
                 options={options}
-                showDates={(value) => value == 'reposo'}
+                showDates={(value) => value === 'reposo'}
             ></SelectList>
             <Button block htmlType="submit" type="primary" className="button-pdf">
                 Exportar a PDF

@@ -39,7 +39,7 @@ const PatientDetails: React.FC<Props> = ({ data, onFinish, children, disabled })
 
     useEffect(() => {
         formRef.setFieldsValue({ age });
-    }, [age]);
+    }, [age, formRef]);
 
     const handleOnFinish = (values: Store) => {
         // format back to a string
