@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
-import { Tabs, Row, Col, Button } from 'antd';
+import { Tabs, Button } from 'antd';
 import { Store } from 'antd/lib/form/interface';
+import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
 import PatientDetails from './components/PatientDetails';
 import useStory from './api/useStory';
 import { Patient } from './types';
+import styles from './HistoryDetails.module.css';
 
 interface Props extends RouteComponentProps {
     $key?: string;
@@ -13,6 +15,16 @@ interface Props extends RouteComponentProps {
 const HistoryDetails: React.FC<Props> = ({ location }) => {
     // using pathname instead of $key because Firestore needs the full path to the object to find it.
     const { response, api } = useStory(location?.pathname || '');
+    const breakpoints = useBreakpoint();
+    const [tabPosition, setTabPosition] = useState<'left' | 'top'>('left');
+
+    useEffect(() => {
+        if (breakpoints.lg) {
+            setTabPosition('left');
+        } else {
+            setTabPosition('top');
+        }
+    }, [breakpoints]);
 
     const handlePatientUpdate = (patientInfo: Store) => {
         api.updatePatientInfo(patientInfo as Patient);
@@ -21,12 +33,9 @@ const HistoryDetails: React.FC<Props> = ({ location }) => {
 
     return (
         <>
-            <Row className="titulo-name">
-                <Col span={6}>
-                    <h1>Nombre del Paciente</h1>
-                </Col>
-            </Row>
-            <Tabs defaultActiveKey="1" tabPosition="left">
+            <h1 className={styles.patientName}>Nombre del Paciente</h1>
+
+            <Tabs defaultActiveKey="1" tabPosition={tabPosition}>
                 <TabPane className="fill-appointment-tab-container" tab="Datos personales" key={'1'}>
                     {!response.data ? (
                         'loading'
