@@ -1,4 +1,4 @@
-import { Story, Appointment, AppointmentStatus } from '../types';
+import { Story, Appointment, AppointmentStatusEnum } from '../types';
 
 export interface SeedStory extends Story {
     appointments: Appointment[];
@@ -23,13 +23,39 @@ export const seedStory1: SeedStory = {
         {
             $key: '1',
             date: '05-06-2020',
-            status: AppointmentStatus.waiting,
+            status: AppointmentStatusEnum.waiting,
             time: '10:00',
         },
         {
             $key: '2',
             date: '05-07-2020',
-            status: AppointmentStatus.open,
+            status: AppointmentStatusEnum.open,
+            time: '10:00',
+        },
+        {
+            $key: '3',
+            date: '05-06-2020',
+            status: AppointmentStatusEnum.cancelled,
+            time: '10:00',
+        },
+        {
+            $key: '4',
+            date: '05-07-2020',
+            status: AppointmentStatusEnum.closed,
+            time: '10:00',
+            diagnosis: 'Un diagnóstico acá',
+        },
+        {
+            $key: '5',
+            date: '05-06-2020',
+            status: AppointmentStatusEnum.closed,
+            time: '10:00',
+            diagnosis: 'Y otro por acá',
+        },
+        {
+            $key: '6',
+            date: '05-07-2020',
+            status: AppointmentStatusEnum.pending,
             time: '10:00',
         },
     ],
@@ -54,13 +80,13 @@ export const seedStory2: SeedStory = {
         {
             $key: '3',
             date: '03-06-2020',
-            status: AppointmentStatus.waiting,
+            status: AppointmentStatusEnum.waiting,
             time: '13:00',
         },
         {
             $key: '4',
             date: '02-07-2020',
-            status: AppointmentStatus.open,
+            status: AppointmentStatusEnum.open,
             time: '15:00',
         },
     ],

@@ -21,7 +21,7 @@ export interface AppointmentForm {
     text: string;
 }
 
-export enum AppointmentStatus {
+export enum AppointmentStatusEnum {
     'pending' = 'pending',
     'waiting' = 'waiting',
     'cancelled' = 'cancelled',
@@ -33,7 +33,8 @@ export interface Appointment {
     $key: string;
     date: string;
     time: string;
-    status: AppointmentStatus;
+    diagnosis?: string;
+    status: AppointmentStatusEnum;
 }
 
 export interface Story {

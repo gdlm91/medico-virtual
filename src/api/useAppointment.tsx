@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 
 import { get, update } from '../db/firestore.db';
-import { Entities, Appointment, AppointmentStatus } from '../types';
+import { Entities, Appointment, AppointmentStatusEnum } from '../types';
 import useResponse, { Response } from './utils/useResponse';
 import createApiFn from './utils/createApiFn';
 
 interface AppointmentAPI {
-    changeStatus: (status: AppointmentStatus) => void;
+    changeStatus: (status: AppointmentStatusEnum) => void;
     rescheduled: (date: string, time: string) => void;
 }
 
@@ -24,7 +24,7 @@ const useAppointment = ($key: string): UseAppointment => {
     }, [$key]);
 
     const changeStatus = createApiFn<Appointment>(
-        async (status: AppointmentStatus) => {
+        async (status: AppointmentStatusEnum) => {
             if (!response.data) {
                 return;
             }

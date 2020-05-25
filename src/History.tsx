@@ -14,8 +14,6 @@ const History: React.FC<RouteComponentProps> = ({ children }) => {
                         onSearch={(value) => console.log(value)}
                         enterButton
                     />
-                    <br />
-                    <br />
                 </Col>
                 <Col>
                     <Button>Registrar nuevo paciente</Button>

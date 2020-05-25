@@ -5,7 +5,7 @@ import { Store } from 'antd/lib/form/interface';
 import { Moment } from 'moment';
 
 import { FieldList, Error, FieldForm, ApiContext } from './components/ApiHelpsers';
-import { Patient, AppointmentStatus } from './types';
+import { Patient, AppointmentStatusEnum } from './types';
 
 import useStoryList from './api/useStoryList';
 import useStory from './api/useStory';
@@ -123,7 +123,7 @@ const AppointmentApi = ({ $key }: ApiProps) => {
     const { response, api } = useAppointment($key);
 
     const handleChangeStatus = (values: Store) => {
-        api.changeStatus(values.status as AppointmentStatus);
+        api.changeStatus(values.status as AppointmentStatusEnum);
     };
 
     const handleRescheduled = (values: Store) => {
@@ -151,7 +151,7 @@ const AppointmentApi = ({ $key }: ApiProps) => {
                 <Form name="changeStatus" onFinish={handleChangeStatus}>
                     <Form.Item name="status" label="Nuevo estado">
                         <Select disabled={response.loading}>
-                            {Object.keys(AppointmentStatus).map((status) => (
+                            {Object.keys(AppointmentStatusEnum).map((status) => (
                                 <Select.Option value={status} key={status}>
                                     {status}
                                 </Select.Option>
