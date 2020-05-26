@@ -32,7 +32,8 @@
         "react-scripts": "3.4.1",
         "rxfire": "^3.12.2",
         "rxjs": "^6.5.5",
-        "typescript": "~3.7.2"
+        "typescript": "~3.7.2",
+        "use-debounce": "^3.4.2"
     },
     "resolutions": {
         "moment": "2.24.0"
