@@ -15,6 +15,13 @@ interface UseAppointment {
     api: AppointmentAPI;
 }
 
+export const getAppointmentKeysFromPath = ($path: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_div1, storyKey, _div2, appointmentKey] = $path.split('/');
+
+    return { storyKey, appointmentKey };
+};
+
 const useAppointment = (storyKey: string, appointmentKey: string): UseAppointment => {
     const path = `${Entities.stories}/${storyKey}/${Entities.appointments}/${appointmentKey}`;
     const [appointment$, setAppointment$] = useState(get<Appointment>(path));

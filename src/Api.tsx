@@ -9,8 +9,8 @@ import { Patient, AppointmentStatusEnum } from './types';
 
 import useStoryList from './hooks/useStoryList';
 import useStory from './hooks/useStory';
-import useAppointmentList from './hooks/useAppointmentList';
-import useAppointment from './hooks/useAppointment';
+import useAllAppointmentList from './hooks/useAllAppointmentList';
+import useAppointment, { getAppointmentKeysFromPath } from './hooks/useAppointment';
 
 const StoryListApi = () => {
     const { response } = useStoryList();
@@ -91,9 +91,9 @@ const StoryApi = ({ $key }: { $key: string }) => {
     );
 };
 
-const AppointmentListApi = () => {
-    const { response } = useAppointmentList();
-    const { setAppointmentKey } = useContext(ApiContext);
+const AllAppointmentListApi = () => {
+    const { response } = useAllAppointmentList();
+    const { setAppointmentPath: setAppointmentKey } = useContext(ApiContext);
 
     return (
         <>
@@ -103,7 +103,7 @@ const AppointmentListApi = () => {
                 <Form.Item label="Seleccionar una consulta">
                     <Select onSelect={(key) => setAppointmentKey(key as string)}>
                         {response.data.map((appointment) => (
-                            <Select.Option value={appointment.$key} key={appointment.$key}>
+                            <Select.Option value={appointment.$path} key={appointment.$path}>
                                 {appointment.date} - {appointment.time}
                             </Select.Option>
                         ))}
@@ -115,8 +115,9 @@ const AppointmentListApi = () => {
     );
 };
 
-const AppointmentApi = ({ $storyKey, $key }: { $storyKey: string; $key: string }) => {
-    const { response, api } = useAppointment($storyKey, $key);
+const AppointmentApi = ({ $path }: { $path: string }) => {
+    const { storyKey, appointmentKey } = getAppointmentKeysFromPath($path);
+    const { response, api } = useAppointment(storyKey, appointmentKey);
 
     const handleChangeStatus = (values: Store) => {
         api.changeStatus(values.status as AppointmentStatusEnum);
@@ -179,17 +180,17 @@ const AppointmentApi = ({ $storyKey, $key }: { $storyKey: string; $key: string }
 
 const Api: React.FC<RouteComponentProps> = () => {
     const [storyKey, setStoryKey] = useState<string>();
-    const [appointmentKey, setAppointmentKey] = useState<string>();
+    const [appointmentPath, setAppointmentPath] = useState<string>();
 
     return (
-        <ApiContext.Provider value={{ storyKey, setStoryKey, appointmentKey, setAppointmentKey }}>
+        <ApiContext.Provider value={{ storyKey, setStoryKey, appointmentPath, setAppointmentPath }}>
             <h1>Historias</h1>
             <StoryListApi />
             {storyKey && <StoryApi $key={storyKey} />}
 
             <h1>Consultas</h1>
-            <AppointmentListApi />
-            {storyKey && appointmentKey && <AppointmentApi $storyKey={storyKey} $key={appointmentKey} />}
+            <AllAppointmentListApi />
+            {appointmentPath && <AppointmentApi $path={appointmentPath} />}
         </ApiContext.Provider>
     );
 };

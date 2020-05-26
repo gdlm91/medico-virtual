@@ -1,16 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-import { listAll } from '../db/firestore.db';
+import { list } from '../db/firestore.db';
 import { Entities, Appointment } from '../types';
 import useResponse, { Response } from './utils/useResponse';
 
-interface UseAppointmentList {
+interface UseStoryList {
     response: Response<Appointment[]>;
 }
 
-const useAppointmentList = (): UseAppointmentList => {
-    const [appointmentList$] = useState(listAll<Appointment>(Entities.appointments));
-    const [response] = useResponse(appointmentList$);
+const useAppointmentList = (storyKey: string): UseStoryList => {
+    const path = `${Entities.stories}/${storyKey}/${Entities.appointments}`;
+    const [storyList$, setStoryList$] = useState(list<Appointment>(path));
+    const [response] = useResponse(storyList$);
+
+    useEffect(() => {
+        setStoryList$(list<Appointment>(path));
+    }, [path]);
 
     return { response };
 };

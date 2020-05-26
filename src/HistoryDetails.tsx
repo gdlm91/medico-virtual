@@ -16,7 +16,7 @@ interface Props extends RouteComponentProps {
 
 const HistoryDetails: React.FC<Props> = ({ storyKey }) => {
     const { response: storyResponse, api: storyApi } = useStory(storyKey as string);
-    const { response: appointmentsResponse } = useAppointmentList();
+    const { response: appointmentsResponse } = useAppointmentList(storyKey as string);
     const breakpoints = useBreakpoint();
     const [tabPosition, setTabPosition] = useState<'left' | 'top'>('left');
 
