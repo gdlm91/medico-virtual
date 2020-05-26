@@ -15,13 +15,14 @@ interface UseAppointment {
     api: AppointmentAPI;
 }
 
-const useAppointment = ($key: string): UseAppointment => {
-    const [appointment$, setAppointment$] = useState(get<Appointment>(Entities.appointment, $key));
+const useAppointment = (storyKey: string, appointmentKey: string): UseAppointment => {
+    const path = `${Entities.stories}/${storyKey}/${Entities.appointments}/${appointmentKey}`;
+    const [appointment$, setAppointment$] = useState(get<Appointment>(path));
     const [response, setResponse] = useResponse(appointment$);
 
     useEffect(() => {
-        setAppointment$(get<Appointment>(Entities.appointment, $key));
-    }, [$key]);
+        setAppointment$(get<Appointment>(path));
+    }, [path]);
 
     const changeStatus = createApiFn<Appointment>(
         async (status: AppointmentStatusEnum) => {
@@ -29,7 +30,7 @@ const useAppointment = ($key: string): UseAppointment => {
                 return;
             }
 
-            return update<Appointment>(Entities.appointment, $key, { ...response.data, status });
+            return update<Appointment>(path, { ...response.data, status });
         },
         response,
         setResponse,
@@ -41,7 +42,7 @@ const useAppointment = ($key: string): UseAppointment => {
                 return;
             }
 
-            return update<Appointment>(Entities.appointment, $key, { ...response.data, date, time });
+            return update<Appointment>(path, { ...response.data, date, time });
         },
         response,
         setResponse,

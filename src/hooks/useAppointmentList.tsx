@@ -9,8 +9,8 @@ interface UseAppointmentList {
 }
 
 const useAppointmentList = (): UseAppointmentList => {
-    const [appointment$] = useState(listAll<Appointment>(Entities.appointment));
-    const [response] = useResponse(appointment$);
+    const [appointmentList$] = useState(listAll<Appointment>(Entities.appointments));
+    const [response] = useResponse(appointmentList$);
 
     return { response };
 };

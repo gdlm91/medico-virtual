@@ -7,14 +7,10 @@ import { Moment } from 'moment';
 import { FieldList, Error, FieldForm, ApiContext } from './components/ApiHelpsers';
 import { Patient, AppointmentStatusEnum } from './types';
 
-import useStoryList from './api/useStoryList';
-import useStory from './api/useStory';
-import useAppointmentList from './api/useAppointmentList';
-import useAppointment from './api/useAppointment';
-
-interface ApiProps {
-    $key: string;
-}
+import useStoryList from './hooks/useStoryList';
+import useStory from './hooks/useStory';
+import useAppointmentList from './hooks/useAppointmentList';
+import useAppointment from './hooks/useAppointment';
 
 const StoryListApi = () => {
     const { response } = useStoryList();
@@ -41,7 +37,7 @@ const StoryListApi = () => {
     );
 };
 
-const StoryApi = ({ $key }: ApiProps) => {
+const StoryApi = ({ $key }: { $key: string }) => {
     const { response, api } = useStory($key);
     const [form] = Form.useForm();
     const keys = [
@@ -119,8 +115,8 @@ const AppointmentListApi = () => {
     );
 };
 
-const AppointmentApi = ({ $key }: ApiProps) => {
-    const { response, api } = useAppointment($key);
+const AppointmentApi = ({ $storyKey, $key }: { $storyKey: string; $key: string }) => {
+    const { response, api } = useAppointment($storyKey, $key);
 
     const handleChangeStatus = (values: Store) => {
         api.changeStatus(values.status as AppointmentStatusEnum);
@@ -193,7 +189,7 @@ const Api: React.FC<RouteComponentProps> = () => {
 
             <h1>Consultas</h1>
             <AppointmentListApi />
-            {appointmentKey && <AppointmentApi $key={appointmentKey} />}
+            {storyKey && appointmentKey && <AppointmentApi $storyKey={storyKey} $key={appointmentKey} />}
         </ApiContext.Provider>
     );
 };

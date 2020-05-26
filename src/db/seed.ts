@@ -6,6 +6,7 @@ export interface SeedStory extends Story {
 
 export const seedStory1: SeedStory = {
     $key: '1',
+    $path: 'fake/path',
     patient: {
         birthday: '01-01-1985',
         country: 'Alemania',
@@ -22,24 +23,28 @@ export const seedStory1: SeedStory = {
     appointments: [
         {
             $key: '1',
+            $path: 'fake/path',
             date: '05-06-2020',
             status: AppointmentStatusEnum.waiting,
             time: '10:00',
         },
         {
             $key: '2',
+            $path: 'fake/path',
             date: '05-07-2020',
             status: AppointmentStatusEnum.open,
             time: '10:00',
         },
         {
             $key: '3',
+            $path: 'fake/path',
             date: '05-06-2020',
             status: AppointmentStatusEnum.cancelled,
             time: '10:00',
         },
         {
             $key: '4',
+            $path: 'fake/path',
             date: '05-07-2020',
             status: AppointmentStatusEnum.closed,
             time: '10:00',
@@ -47,6 +52,7 @@ export const seedStory1: SeedStory = {
         },
         {
             $key: '5',
+            $path: 'fake/path',
             date: '05-06-2020',
             status: AppointmentStatusEnum.closed,
             time: '10:00',
@@ -54,6 +60,7 @@ export const seedStory1: SeedStory = {
         },
         {
             $key: '6',
+            $path: 'fake/path',
             date: '05-07-2020',
             status: AppointmentStatusEnum.pending,
             time: '10:00',
@@ -63,6 +70,7 @@ export const seedStory1: SeedStory = {
 
 export const seedStory2: SeedStory = {
     $key: '2',
+    $path: 'fake/path',
     patient: {
         birthday: '01-01-1985',
         country: 'Vaticano',
@@ -79,12 +87,14 @@ export const seedStory2: SeedStory = {
     appointments: [
         {
             $key: '3',
+            $path: 'fake/path',
             date: '03-06-2020',
             status: AppointmentStatusEnum.waiting,
             time: '13:00',
         },
         {
             $key: '4',
+            $path: 'fake/path',
             date: '02-07-2020',
             status: AppointmentStatusEnum.open,
             time: '15:00',

@@ -49,7 +49,7 @@ function App() {
                     <Router>
                         <Agenda path="/" />
                         <History path="/stories">
-                            <HistoryDetails path=":$key" />
+                            <HistoryDetails path=":storyKey" />
                         </History>
                         <DoctorProfile path="/doctorProfile" />
                         <FillAppointment path="/appointment/:key" />

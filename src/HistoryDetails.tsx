@@ -4,19 +4,18 @@ import { Tabs, Button } from 'antd';
 import { Store } from 'antd/lib/form/interface';
 import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
 import PatientDetails from './components/PatientDetails';
-import useStory from './api/useStory';
+import useStory from './hooks/useStory';
 import { Patient } from './types';
 import styles from './HistoryDetails.module.css';
-import useAppointmentList from './api/useAppointmentList';
+import useAppointmentList from './hooks/useAppointmentList';
 import AppointmentHistory from './components/AppointmentHistory';
 
 interface Props extends RouteComponentProps {
-    $key?: string;
+    storyKey?: string;
 }
 
-const HistoryDetails: React.FC<Props> = ({ location }) => {
-    // using pathname instead of $key because Firestore needs the full path to the object to find it.
-    const { response: storyResponse, api: storyApi } = useStory(location?.pathname || '');
+const HistoryDetails: React.FC<Props> = ({ storyKey }) => {
+    const { response: storyResponse, api: storyApi } = useStory(storyKey as string);
     const { response: appointmentsResponse } = useAppointmentList();
     const breakpoints = useBreakpoint();
     const [tabPosition, setTabPosition] = useState<'left' | 'top'>('left');
