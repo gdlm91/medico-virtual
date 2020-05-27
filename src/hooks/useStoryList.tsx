@@ -10,7 +10,7 @@ interface UseStoryList {
 }
 
 const useStoryList = (query = ''): UseStoryList => {
-    const [debouncedQuery] = useDebounce(query, 500);
+    const [debouncedQuery] = useDebounce(query, 300);
     const [storyList$, setStoryList$] = useState(
         listAll<Story>(`${Entities.stories}`, [['keywords', 'array-contains', debouncedQuery || '']]),
     );
