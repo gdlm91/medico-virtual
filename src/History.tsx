@@ -36,7 +36,7 @@ const History: React.FC<RouteComponentProps> = ({ children, navigate }) => {
     return (
         <>
             <Row gutter={16} justify="space-between">
-                <Col lg={8}>
+                <Col lg={8} md={12} span={24}>
                     <AutoComplete
                         style={{ display: 'block' }}
                         onSelect={handleOnSelect}
@@ -54,7 +54,7 @@ const History: React.FC<RouteComponentProps> = ({ children, navigate }) => {
                 </Col>
             </Row>
 
-            {children}
+            <div style={{ paddingTop: '30px' }}>{children}</div>
         </>
     );
 };
