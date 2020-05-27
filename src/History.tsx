@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
-import { Row, Col, Button, Input, AutoComplete } from 'antd';
+import { Row, Col, Input, AutoComplete } from 'antd';
 
 import useStoryList from './hooks/useStoryList';
-import { Story } from './types';
+import { Story, Patient } from './types';
 import styles from './History.module.css';
+import PatientRegistration, { Api as PatientRegistrationApi } from './components/PatientRegistration';
 
 const History: React.FC<RouteComponentProps> = ({ children, navigate }) => {
     const [query, setQuery] = useState('');
-    const { response } = useStoryList(query);
+    const { response, api } = useStoryList(query);
 
     const { Search } = Input;
 
@@ -19,6 +20,16 @@ const History: React.FC<RouteComponentProps> = ({ children, navigate }) => {
     const handleOnSelect = (storyPath: string) => {
         navigate && navigate(`/${storyPath}`);
         setQuery('');
+    };
+
+    const handlePatientRegistration = async (value: Patient, patientRegistrationAPI: PatientRegistrationApi) => {
+        try {
+            const result = await api.createStory(value);
+            patientRegistrationAPI.hideModal();
+            navigate && navigate(`/${result.path}`);
+        } catch (error) {
+            patientRegistrationAPI.showError(error.message);
+        }
     };
 
     const getOptions = (stories: Story[]) => {
@@ -50,7 +61,7 @@ const History: React.FC<RouteComponentProps> = ({ children, navigate }) => {
                     </AutoComplete>
                 </Col>
                 <Col>
-                    <Button>Registrar nuevo paciente</Button>
+                    <PatientRegistration onFinish={handlePatientRegistration} />
                 </Col>
             </Row>
 

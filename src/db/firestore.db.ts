@@ -45,17 +45,17 @@ export const get = <T>(path: string): Observable<T> => {
 };
 
 export const update = async <T>(path: string, data: T): Promise<void> => {
-    const docRef = db.doc(path);
+    try {
+        const docRef = db.doc(path);
 
-    await docRef.update({ ...data, $key: null });
-
-    return;
+        return await docRef.update({ ...data, $key: null });
+    } catch (error) {
+        return error;
+    }
 };
 
-export const add = async <T>(path: string, data: T): Promise<void> => {
+export const add = <T>(path: string, data: T): Promise<firebase.firestore.DocumentReference> => {
     const collectionRef = db.collection(path);
 
-    await collectionRef.add(data);
-
-    return;
+    return collectionRef.add(data);
 };
