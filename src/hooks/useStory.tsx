@@ -14,13 +14,14 @@ interface UseStory {
     api: StoryAPI;
 }
 
-const useStory = ($key: string): UseStory => {
-    const [story$, setStory$] = useState(get<Story>(Entities.story, $key));
+const useStory = (storyKey: string): UseStory => {
+    const path = `${Entities.stories}/${storyKey}`;
+    const [story$, setStory$] = useState(get<Story>(path));
     const [response, setResponse] = useResponse(story$);
 
     useEffect(() => {
-        setStory$(get<Story>(Entities.story, $key));
-    }, [$key]);
+        setStory$(get<Story>(path));
+    }, [path]);
 
     const updatePatientInfo = createApiFn<Story>(
         async (patient: Patient) => {
@@ -28,9 +29,7 @@ const useStory = ($key: string): UseStory => {
                 return;
             }
 
-            console.log(patient);
-
-            return update<Story>(Entities.story, $key, { ...response.data, patient });
+            return update<Story>(path, { ...response.data, patient });
         },
         response,
         setResponse,

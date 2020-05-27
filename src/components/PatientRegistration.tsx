@@ -31,6 +31,7 @@ const PatientRegistration: React.FC = () => {
     ];
 
     const validateMessages = {
+        // eslint-disable-next-line no-template-curly-in-string
         required: '${label} es requerido',
     };
 

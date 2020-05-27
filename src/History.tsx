@@ -7,17 +7,15 @@ const History: React.FC<RouteComponentProps> = ({ children }) => {
 
     return (
         <>
-            <Row gutter={16}>
-                <Col span={8}>
+            <Row gutter={16} justify="space-between">
+                <Col>
                     <Search
                         placeholder="Buscar paciente por nombre o documento"
                         onSearch={(value) => console.log(value)}
                         enterButton
                     />
-                    <br />
-                    <br />
                 </Col>
-                <Col span={2} offset={12}>
+                <Col>
                     <Button>Registrar nuevo paciente</Button>
                 </Col>
             </Row>

@@ -5,16 +5,12 @@ import { Store } from 'antd/lib/form/interface';
 import { Moment } from 'moment';
 
 import { FieldList, Error, FieldForm, ApiContext } from './components/ApiHelpsers';
-import { Patient, AppointmentStatus } from './types';
+import { Patient, AppointmentStatusEnum } from './types';
 
-import useStoryList from './api/useStoryList';
-import useStory from './api/useStory';
-import useAppointmentList from './api/useAppointmentList';
-import useAppointment from './api/useAppointment';
-
-interface ApiProps {
-    $key: string;
-}
+import useStoryList from './hooks/useStoryList';
+import useStory from './hooks/useStory';
+import useAllAppointmentList from './hooks/useAllAppointmentList';
+import useAppointment, { getAppointmentKeysFromPath } from './hooks/useAppointment';
 
 const StoryListApi = () => {
     const { response } = useStoryList();
@@ -41,7 +37,7 @@ const StoryListApi = () => {
     );
 };
 
-const StoryApi = ({ $key }: ApiProps) => {
+const StoryApi = ({ $key }: { $key: string }) => {
     const { response, api } = useStory($key);
     const [form] = Form.useForm();
     const keys = [
@@ -95,9 +91,9 @@ const StoryApi = ({ $key }: ApiProps) => {
     );
 };
 
-const AppointmentListApi = () => {
-    const { response } = useAppointmentList();
-    const { setAppointmentKey } = useContext(ApiContext);
+const AllAppointmentListApi = () => {
+    const { response } = useAllAppointmentList();
+    const { setAppointmentPath: setAppointmentKey } = useContext(ApiContext);
 
     return (
         <>
@@ -107,7 +103,7 @@ const AppointmentListApi = () => {
                 <Form.Item label="Seleccionar una consulta">
                     <Select onSelect={(key) => setAppointmentKey(key as string)}>
                         {response.data.map((appointment) => (
-                            <Select.Option value={appointment.$key} key={appointment.$key}>
+                            <Select.Option value={appointment.$path} key={appointment.$path}>
                                 {appointment.date} - {appointment.time}
                             </Select.Option>
                         ))}
@@ -119,11 +115,12 @@ const AppointmentListApi = () => {
     );
 };
 
-const AppointmentApi = ({ $key }: ApiProps) => {
-    const { response, api } = useAppointment($key);
+const AppointmentApi = ({ $path }: { $path: string }) => {
+    const { storyKey, appointmentKey } = getAppointmentKeysFromPath($path);
+    const { response, api } = useAppointment(storyKey, appointmentKey);
 
     const handleChangeStatus = (values: Store) => {
-        api.changeStatus(values.status as AppointmentStatus);
+        api.changeStatus(values.status as AppointmentStatusEnum);
     };
 
     const handleRescheduled = (values: Store) => {
@@ -151,7 +148,7 @@ const AppointmentApi = ({ $key }: ApiProps) => {
                 <Form name="changeStatus" onFinish={handleChangeStatus}>
                     <Form.Item name="status" label="Nuevo estado">
                         <Select disabled={response.loading}>
-                            {Object.keys(AppointmentStatus).map((status) => (
+                            {Object.keys(AppointmentStatusEnum).map((status) => (
                                 <Select.Option value={status} key={status}>
                                     {status}
                                 </Select.Option>
@@ -183,17 +180,17 @@ const AppointmentApi = ({ $key }: ApiProps) => {
 
 const Api: React.FC<RouteComponentProps> = () => {
     const [storyKey, setStoryKey] = useState<string>();
-    const [appointmentKey, setAppointmentKey] = useState<string>();
+    const [appointmentPath, setAppointmentPath] = useState<string>();
 
     return (
-        <ApiContext.Provider value={{ storyKey, setStoryKey, appointmentKey, setAppointmentKey }}>
+        <ApiContext.Provider value={{ storyKey, setStoryKey, appointmentPath, setAppointmentPath }}>
             <h1>Historias</h1>
             <StoryListApi />
             {storyKey && <StoryApi $key={storyKey} />}
 
             <h1>Consultas</h1>
-            <AppointmentListApi />
-            {appointmentKey && <AppointmentApi $key={appointmentKey} />}
+            <AllAppointmentListApi />
+            {appointmentPath && <AppointmentApi $path={appointmentPath} />}
         </ApiContext.Provider>
     );
 };

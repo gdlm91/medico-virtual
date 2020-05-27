@@ -98,13 +98,13 @@ export const Error: React.FC<{ description: string }> = ({ description }) => (
 interface ApiState {
     setStoryKey: (key: string) => void;
     storyKey?: string;
-    setAppointmentKey: (key: string) => void;
-    appointmentKey?: string;
+    setAppointmentPath: (path: string) => void;
+    appointmentPath?: string;
 }
 
 const noop = () => console.error('ApiStateProvider not ready');
 
 export const ApiContext = React.createContext<ApiState>({
     setStoryKey: noop,
-    setAppointmentKey: noop,
+    setAppointmentPath: noop,
 });

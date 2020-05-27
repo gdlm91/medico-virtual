@@ -8,11 +8,11 @@ interface UseAppointmentList {
     response: Response<Appointment[]>;
 }
 
-const useAppointmentList = (): UseAppointmentList => {
-    const [appointment$] = useState(listAll<Appointment>(Entities.appointment));
-    const [response] = useResponse(appointment$);
+const useAllAppointmentList = (): UseAppointmentList => {
+    const [appointmentList$] = useState(listAll<Appointment>(Entities.appointments));
+    const [response] = useResponse(appointmentList$);
 
     return { response };
 };
 
-export default useAppointmentList;
+export default useAllAppointmentList;

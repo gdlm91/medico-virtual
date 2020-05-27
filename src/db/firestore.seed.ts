@@ -13,21 +13,24 @@ const app = admin.initializeApp({
 
 const db = app.firestore();
 
-const storiesColRef = db.collection(Entities.story);
-const appointmentsColGroupRef = db.collectionGroup(Entities.appointment);
+const storiesColRef = db.collection(Entities.stories);
+const appointmentsColGroupRef = db.collectionGroup(Entities.appointments);
 
 const addAppointment = (
     seed: Appointment,
     storyRef: FirebaseFirestore.DocumentReference,
     transaction: FirebaseFirestore.Transaction,
 ) => {
-    const appointmentDocRef = storyRef.collection(Entities.appointment).doc();
-    transaction.create(appointmentDocRef, seed);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { $key, $path, ...appointment } = seed;
+    const appointmentDocRef = storyRef.collection(Entities.appointments).doc();
+
+    transaction.create(appointmentDocRef, appointment);
 };
 
 const addStory = (seed: SeedStory, transaction: FirebaseFirestore.Transaction) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { appointments, $key, ...story } = seed;
+    const { appointments, $key, $path, ...story } = seed;
     const storyDocRef = storiesColRef.doc();
 
     transaction.create(storyDocRef, story);

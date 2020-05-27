@@ -5,7 +5,6 @@ import { map } from 'rxjs/operators';
 import { collection, doc } from 'rxfire/firestore';
 
 import config from './firestore.config';
-import { Entities } from '../types';
 
 const app = firebase.initializeApp(config);
 
@@ -14,32 +13,33 @@ export const db = app.firestore();
 export function snapToData(snapshot: firebase.firestore.DocumentSnapshot): {} {
     return {
         ...snapshot.data(),
-        $key: snapshot.ref.path,
+        $key: snapshot.id,
+        $path: snapshot.ref.path,
     };
 }
 
-export const list = <T>(entity: Entities): Observable<T[]> => {
-    return collection(db.collection(entity)).pipe(map((docs) => docs.map((doc) => snapToData(doc) as T)));
+export const list = <T>(path: string): Observable<T[]> => {
+    return collection(db.collection(path)).pipe(map((docs) => docs.map((doc) => snapToData(doc) as T)));
 };
 
-export const listAll = <T extends { $key: string }>(entity: Entities): Observable<T[]> => {
-    return collection(db.collectionGroup(entity)).pipe(map((docs) => docs.map((doc) => snapToData(doc) as T)));
+export const listAll = <T>(path: string): Observable<T[]> => {
+    return collection(db.collectionGroup(path)).pipe(map((docs) => docs.map((doc) => snapToData(doc) as T)));
 };
 
-export const get = <T>(entity: Entities, $key: string): Observable<T> => {
-    return doc(db.doc($key)).pipe(map((doc) => snapToData(doc) as T));
+export const get = <T>(path: string): Observable<T> => {
+    return doc(db.doc(path)).pipe(map((doc) => snapToData(doc) as T));
 };
 
-export const update = async <T>(entity: Entities, $key: string, data: T): Promise<void> => {
-    const docRef = db.doc($key);
+export const update = async <T>(path: string, data: T): Promise<void> => {
+    const docRef = db.doc(path);
 
     await docRef.update({ ...data, $key: null });
 
     return;
 };
 
-export const add = async <T>(entity: Entities, data: T): Promise<void> => {
-    const collectionRef = db.collection(entity);
+export const add = async <T>(path: string, data: T): Promise<void> => {
+    const collectionRef = db.collection(path);
 
     await collectionRef.add(data);
 

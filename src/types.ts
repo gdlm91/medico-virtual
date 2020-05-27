@@ -1,6 +1,6 @@
 export enum Entities {
-    'story' = 'stories',
-    'appointment' = 'appointments',
+    'stories' = 'stories',
+    'appointments' = 'appointments',
 }
 
 export interface Patient {
@@ -21,7 +21,7 @@ export interface AppointmentForm {
     text: string;
 }
 
-export enum AppointmentStatus {
+export enum AppointmentStatusEnum {
     'pending' = 'pending',
     'waiting' = 'waiting',
     'cancelled' = 'cancelled',
@@ -31,12 +31,15 @@ export enum AppointmentStatus {
 
 export interface Appointment {
     $key: string;
+    $path: string;
     date: string;
     time: string;
-    status: AppointmentStatus;
+    diagnosis?: string;
+    status: AppointmentStatusEnum;
 }
 
 export interface Story {
     $key: string;
+    $path: string;
     patient: Patient;
 }

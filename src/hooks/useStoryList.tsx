@@ -9,7 +9,7 @@ interface UseStoryList {
 }
 
 const useStoryList = (): UseStoryList => {
-    const [storyList$] = useState(listAll<Story>(Entities.story));
+    const [storyList$] = useState(listAll<Story>(`${Entities.stories}`));
     const [response] = useResponse(storyList$);
 
     return { response };
