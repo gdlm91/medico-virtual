@@ -8,7 +8,9 @@ import config from './firestore.config';
 
 const app = firebase.initializeApp(config);
 
-export const db = app.firestore();
+const db = app.firestore();
+
+export type FirestoreQuery = [string | firebase.firestore.FieldPath, firebase.firestore.WhereFilterOp, unknown];
 
 export function snapToData(snapshot: firebase.firestore.DocumentSnapshot): {} {
     return {
@@ -18,12 +20,24 @@ export function snapToData(snapshot: firebase.firestore.DocumentSnapshot): {} {
     };
 }
 
-export const list = <T>(path: string): Observable<T[]> => {
+export const list = <T>(path: string, queries: FirestoreQuery[] = []): Observable<T[]> => {
+    let colRefQuery: firebase.firestore.Query = db.collection(path);
+
+    queries.forEach((query) => {
+        colRefQuery = colRefQuery.where(...query);
+    });
+
     return collection(db.collection(path)).pipe(map((docs) => docs.map((doc) => snapToData(doc) as T)));
 };
 
-export const listAll = <T>(path: string): Observable<T[]> => {
-    return collection(db.collectionGroup(path)).pipe(map((docs) => docs.map((doc) => snapToData(doc) as T)));
+export const listAll = <T>(path: string, queries: FirestoreQuery[] = []): Observable<T[]> => {
+    let colRefQuery: firebase.firestore.Query = db.collectionGroup(path);
+
+    queries.forEach((query) => {
+        colRefQuery = colRefQuery.where(...query);
+    });
+
+    return collection(colRefQuery).pipe(map((docs) => docs.map((doc) => snapToData(doc) as T)));
 };
 
 export const get = <T>(path: string): Observable<T> => {

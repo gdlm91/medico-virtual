@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { RouteComponentProps } from '@reach/router';
-import { Form, Select, Row, Button, DatePicker } from 'antd';
+import { Form, Select, Row, Button, DatePicker, AutoComplete } from 'antd';
 import { Store } from 'antd/lib/form/interface';
 import { Moment } from 'moment';
 
@@ -13,26 +13,35 @@ import useAllAppointmentList from './hooks/useAllAppointmentList';
 import useAppointment, { getAppointmentKeysFromPath } from './hooks/useAppointment';
 
 const StoryListApi = () => {
-    const { response } = useStoryList();
+    const [query, setQuery] = useState('');
+    const { response } = useStoryList(query);
     const { setStoryKey } = useContext(ApiContext);
+
+    const { Option } = AutoComplete;
+
+    const handleOnChange = (q: string) => {
+        setQuery(q.toLowerCase());
+    };
+
+    const handleOnSelect = (s: string) => {
+        setStoryKey(s);
+        setQuery('');
+    };
 
     return (
         <>
             <h3>Listar historias</h3>
-            {!response.data ? (
-                'loading'
-            ) : (
-                <Form.Item label="Seleccionar una historia">
-                    <Select onSelect={(key) => setStoryKey(key as string)}>
-                        {response.data.map((story) => (
-                            <Select.Option value={story.$key} key={story.$key}>
-                                {story.patient.id}: {story.patient.name}
-                            </Select.Option>
+            <Form.Item label="Seleccionar una historia">
+                <AutoComplete value={query} onChange={handleOnChange} onSelect={handleOnSelect}>
+                    {response.data &&
+                        response.data.map((res) => (
+                            <Option key={res.$key} value={res.$key}>
+                                {res.patient.name} - {res.patient.id}
+                            </Option>
                         ))}
-                    </Select>
-                    {response.error && <Error description={response.error.message} />}
-                </Form.Item>
-            )}
+                </AutoComplete>
+                {response.error && <Error description={response.error.message} />}
+            </Form.Item>
         </>
     );
 };

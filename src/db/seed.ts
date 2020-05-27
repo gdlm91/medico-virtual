@@ -1,13 +1,12 @@
-import { Story, Appointment, AppointmentStatusEnum } from '../types';
+import { Story, Appointment, AppointmentStatusEnum, Patient } from '../types';
+import generateKeywords from './utils/tokenizePatientData';
 
 export interface SeedStory extends Story {
     appointments: Appointment[];
 }
 
-export const seedStory1: SeedStory = {
-    $key: '1',
-    $path: 'fake/path',
-    patient: {
+export const getSeedStory1 = (): SeedStory => {
+    const patient: Patient = {
         birthday: '01-01-1985',
         country: 'Alemania',
         email: 'jon@doe.com',
@@ -19,59 +18,64 @@ export const seedStory1: SeedStory = {
         address: '331/4 Mega Ave, Tumaru',
         bloodType: 'ORH negative',
         job: 'Lawyer',
-    },
-    appointments: [
-        {
-            $key: '1',
-            $path: 'fake/path',
-            date: '05-06-2020',
-            status: AppointmentStatusEnum.waiting,
-            time: '10:00',
-        },
-        {
-            $key: '2',
-            $path: 'fake/path',
-            date: '05-07-2020',
-            status: AppointmentStatusEnum.open,
-            time: '10:00',
-        },
-        {
-            $key: '3',
-            $path: 'fake/path',
-            date: '05-06-2020',
-            status: AppointmentStatusEnum.cancelled,
-            time: '10:00',
-        },
-        {
-            $key: '4',
-            $path: 'fake/path',
-            date: '05-07-2020',
-            status: AppointmentStatusEnum.closed,
-            time: '10:00',
-            diagnosis: 'Un diagnóstico acá',
-        },
-        {
-            $key: '5',
-            $path: 'fake/path',
-            date: '05-06-2020',
-            status: AppointmentStatusEnum.closed,
-            time: '10:00',
-            diagnosis: 'Y otro por acá',
-        },
-        {
-            $key: '6',
-            $path: 'fake/path',
-            date: '05-07-2020',
-            status: AppointmentStatusEnum.pending,
-            time: '10:00',
-        },
-    ],
+    };
+
+    return {
+        $key: '1',
+        $path: 'fake/path',
+        patient,
+        keywords: generateKeywords(patient),
+        appointments: [
+            {
+                $key: '1',
+                $path: 'fake/path',
+                date: '05-06-2020',
+                status: AppointmentStatusEnum.waiting,
+                time: '10:00',
+            },
+            {
+                $key: '2',
+                $path: 'fake/path',
+                date: '05-07-2020',
+                status: AppointmentStatusEnum.open,
+                time: '10:00',
+            },
+            {
+                $key: '3',
+                $path: 'fake/path',
+                date: '05-06-2020',
+                status: AppointmentStatusEnum.cancelled,
+                time: '10:00',
+            },
+            {
+                $key: '4',
+                $path: 'fake/path',
+                date: '05-07-2020',
+                status: AppointmentStatusEnum.closed,
+                time: '10:00',
+                diagnosis: 'Un diagnóstico acá',
+            },
+            {
+                $key: '5',
+                $path: 'fake/path',
+                date: '05-06-2020',
+                status: AppointmentStatusEnum.closed,
+                time: '10:00',
+                diagnosis: 'Y otro por acá',
+            },
+            {
+                $key: '6',
+                $path: 'fake/path',
+                date: '05-07-2020',
+                status: AppointmentStatusEnum.pending,
+                time: '10:00',
+            },
+        ],
+    };
 };
 
-export const seedStory2: SeedStory = {
-    $key: '2',
-    $path: 'fake/path',
-    patient: {
+export const getSeedStory2 = (): SeedStory => {
+    const patient: Patient = {
         birthday: '01-01-1985',
         country: 'Vaticano',
         email: 'jane@doe.com',
@@ -83,21 +87,28 @@ export const seedStory2: SeedStory = {
         address: '332/4 Super St, Tumaru',
         bloodType: 'ORH negative',
         job: 'Doctor',
-    },
-    appointments: [
-        {
-            $key: '3',
-            $path: 'fake/path',
-            date: '03-06-2020',
-            status: AppointmentStatusEnum.waiting,
-            time: '13:00',
-        },
-        {
-            $key: '4',
-            $path: 'fake/path',
-            date: '02-07-2020',
-            status: AppointmentStatusEnum.open,
-            time: '15:00',
-        },
-    ],
+    };
+
+    return {
+        $key: '2',
+        $path: 'fake/path',
+        patient,
+        keywords: generateKeywords(patient),
+        appointments: [
+            {
+                $key: '3',
+                $path: 'fake/path',
+                date: '03-06-2020',
+                status: AppointmentStatusEnum.waiting,
+                time: '13:00',
+            },
+            {
+                $key: '4',
+                $path: 'fake/path',
+                date: '02-07-2020',
+                status: AppointmentStatusEnum.open,
+                time: '15:00',
+            },
+        ],
+    };
 };

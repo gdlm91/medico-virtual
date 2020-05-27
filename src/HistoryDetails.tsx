@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
-import { Tabs, Button } from 'antd';
+import { Tabs, Button, Skeleton } from 'antd';
 import { Store } from 'antd/lib/form/interface';
 import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
-import PatientDetails from './components/PatientDetails';
-import useStory from './hooks/useStory';
+
 import { Patient } from './types';
-import styles from './HistoryDetails.module.css';
+import useStory from './hooks/useStory';
 import useAppointmentList from './hooks/useAppointmentList';
+import PatientDetails from './components/PatientDetails';
 import AppointmentHistory from './components/AppointmentHistory';
 
 interface Props extends RouteComponentProps {
@@ -34,37 +34,27 @@ const HistoryDetails: React.FC<Props> = ({ storyKey }) => {
     const { TabPane } = Tabs;
 
     return (
-        <>
-            <h1 className={styles.patientName}>Nombre del Paciente</h1>
+        <Skeleton loading={!storyResponse.data && !appointmentsResponse.data}>
+            <h1 style={{ marginBottom: '30px' }}>{storyResponse.data?.patient.name}</h1>
 
             <Tabs defaultActiveKey="1" tabPosition={tabPosition}>
-                <TabPane className="fill-appointment-tab-container" tab="Datos personales" key={'1'}>
-                    {!storyResponse.data ? (
-                        'loading'
-                    ) : (
-                        <>
-                            <PatientDetails
-                                data={storyResponse.data?.patient}
-                                onFinish={handlePatientUpdate}
-                                disabled={storyResponse.loading}
-                            >
-                                <Button htmlType="submit" disabled={storyResponse.loading}>
-                                    Guardar
-                                </Button>
-                            </PatientDetails>
-                        </>
-                    )}
+                <TabPane tab="Datos personales" key={'1'}>
+                    <PatientDetails
+                        data={storyResponse.data?.patient}
+                        onFinish={handlePatientUpdate}
+                        disabled={storyResponse.loading}
+                    >
+                        <Button htmlType="submit" disabled={storyResponse.loading}>
+                            Guardar
+                        </Button>
+                    </PatientDetails>
                 </TabPane>
 
-                <TabPane className="fill-appointment-tab-container" tab="Historia de consultas" key={'2'}>
-                    {!appointmentsResponse.data ? (
-                        'loading'
-                    ) : (
-                        <AppointmentHistory appointments={appointmentsResponse.data} />
-                    )}
+                <TabPane tab="Historia de consultas" key={'2'}>
+                    <AppointmentHistory appointments={appointmentsResponse.data} />
                 </TabPane>
             </Tabs>
-        </>
+        </Skeleton>
     );
 };
 

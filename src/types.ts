@@ -42,4 +42,5 @@ export interface Story {
     $key: string;
     $path: string;
     patient: Patient;
+    keywords: string[];
 }

@@ -14,7 +14,7 @@ function App() {
     const { Header, Content, Footer } = Layout;
 
     return (
-        <Layout className="layout">
+        <Layout className="layout" style={{ minHeight: '100vh' }}>
             <Header>
                 <Row>
                     <Col>
