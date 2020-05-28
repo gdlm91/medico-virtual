@@ -3,7 +3,7 @@ import * as admin from 'firebase-admin';
 
 import config from './firestore.config';
 import * as serviceAccount from '../../service-account.json';
-import { SeedStory, getSeedStory1, getSeedStory2 } from './seed';
+import { SeedStory, generateSeed } from './seed';
 import { Entities, Appointment } from '../types';
 
 const app = admin.initializeApp({
@@ -55,7 +55,6 @@ const clearDatabase = async (transaction: FirebaseFirestore.Transaction) => {
 
 db.runTransaction(async (transaction) => {
     return clearDatabase(transaction).then(() => {
-        addStory(getSeedStory1(), transaction);
-        addStory(getSeedStory2(), transaction);
+        Array.from({ length: 20 }).forEach(() => addStory(generateSeed(), transaction));
     });
 });
