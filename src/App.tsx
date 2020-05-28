@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Link } from '@reach/router';
+import { Router, Link, Location, WindowLocation } from '@reach/router';
 import { UserOutlined } from '@ant-design/icons';
 import { Row, Col, Avatar, Layout, Menu } from 'antd';
 
@@ -11,47 +11,66 @@ import FillAppointment from './FillAppointment';
 import Api from './Api';
 import HistoryDetails from './HistoryDetails';
 
-interface MenuItemProps {
-    to: string;
-}
-
 function App() {
     const { Header, Content, Footer } = Layout;
+
+    const getSelectedKey = (location: WindowLocation) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const [_, base] = location.pathname.split('/');
+
+        const key = base === '' ? 'agenda' : base;
+
+        return [key];
+    };
 
     return (
         <Layout className="layout" style={{ minHeight: '100vh' }}>
             <Header>
-                <Row>
-                    <Col>
-                        <div className="logo" />
-                    </Col>
-                    <Col>
-                        <Menu theme="dark" mode="horizontal" selectable={false}>
-                            <Menu.Item key="/">
-                                <Link to="/">Agenda</Link>
-                            </Menu.Item>
-                            <Menu.Item key="/stories">
-                                <Link to="/stories">Historia</Link>
-                            </Menu.Item>
-                            <Menu.Item key="/users">
-                                <Link to="/users">Usuarios</Link>
-                            </Menu.Item>
-                            <Menu.Item key="/reports">
-                                <Link to="/reports">Reportes</Link>
-                            </Menu.Item>
-                        </Menu>
-                    </Col>
-                    <Col flex="auto"></Col>
-                    <Col>
-                        <Menu theme="dark" mode="horizontal" selectable={false}>
-                            <Menu.Item key="/profile">
-                                <Link to="/profile">
-                                    <Avatar icon={<UserOutlined />} />
-                                </Link>
-                            </Menu.Item>
-                        </Menu>
-                    </Col>
-                </Row>
+                <Location>
+                    {({ location }) => (
+                        <Row>
+                            <Col>
+                                <div className="logo" />
+                            </Col>
+                            <Col>
+                                <Menu
+                                    theme="dark"
+                                    mode="horizontal"
+                                    selectable={false}
+                                    selectedKeys={getSelectedKey(location)}
+                                >
+                                    <Menu.Item key="agenda">
+                                        <Link to="/">Agenda</Link>
+                                    </Menu.Item>
+                                    <Menu.Item key="stories">
+                                        <Link to="/stories">Historia</Link>
+                                    </Menu.Item>
+                                    <Menu.Item key="users">
+                                        <Link to="/users">Usuarios</Link>
+                                    </Menu.Item>
+                                    <Menu.Item key="reports">
+                                        <Link to="/reports">Reportes</Link>
+                                    </Menu.Item>
+                                </Menu>
+                            </Col>
+                            <Col flex="auto"></Col>
+                            <Col>
+                                <Menu
+                                    theme="dark"
+                                    mode="horizontal"
+                                    selectable={false}
+                                    selectedKeys={getSelectedKey(location)}
+                                >
+                                    <Menu.Item key="profile">
+                                        <Link to="/profile">
+                                            <Avatar icon={<UserOutlined />} />
+                                        </Link>
+                                    </Menu.Item>
+                                </Menu>
+                            </Col>
+                        </Row>
+                    )}
+                </Location>
             </Header>
             <Content style={{ padding: '60px 50px 0' }}>
                 <div className="site-layout-content">
