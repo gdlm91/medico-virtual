@@ -10,8 +10,8 @@ export interface Patient {
     birthday: string;
     phone: string;
     email: string;
-    gender: string;
-    maritalStatus: string;
+    gender?: string;
+    maritalStatus?: string;
     address?: string;
     bloodType?: string;
     job?: string;
