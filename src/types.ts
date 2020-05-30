@@ -36,6 +36,7 @@ export interface Appointment {
     time: string;
     diagnosis?: string;
     status: AppointmentStatusEnum;
+    timestamp: number;
 }
 
 export interface Story {

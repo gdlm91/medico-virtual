@@ -7,6 +7,27 @@ export interface SeedStory extends Story {
     appointments: Appointment[];
 }
 
+const getRamdomTimestamp = () => {
+    const thisYear = new Date().getFullYear();
+    const date = chance().date({ year: thisYear }) as Date;
+    const [hours, minutes] = [
+        String(chance().integer({ min: 9, max: 17 })).padStart(2, '0'),
+        chance().pickone(['00', '30']),
+    ];
+
+    const dateString = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+    const time = `${hours}:${minutes}`;
+    const timestamp = new Date(
+        date.getFullYear(),
+        date.getMonth() + 1,
+        date.getDate(),
+        Number.parseInt(hours),
+        Number.parseInt(minutes),
+    ).getTime();
+
+    return { date: dateString, time, timestamp };
+};
+
 const generatePatient = (): Patient => ({
     name: chance().name({ middle: true }),
     country: chance().country({ full: true }),
@@ -22,7 +43,7 @@ const generatePatient = (): Patient => ({
 
 const generateAppointment = (): Appointment => {
     const diagnosis = chance().bool({ likelihood: 70 }) && chance().sentence();
-    const thisYear = new Date().getFullYear();
+    const { date, time, timestamp } = getRamdomTimestamp();
 
     const appointment: Appointment = {
         $key: 'fake',
@@ -35,8 +56,9 @@ const generateAppointment = (): Appointment => {
                   AppointmentStatusEnum.pending,
                   AppointmentStatusEnum.waiting,
               ]),
-        date: chance().date({ string: true, american: false, year: thisYear }) as string,
-        time: `${String(chance().integer({ min: 9, max: 17 })).padStart(2, '0')}:${chance().pickone(['00', '30'])}`,
+        date,
+        time,
+        timestamp,
     };
 
     if (diagnosis) {

@@ -16,6 +16,7 @@ export const Default = () => {
             date: '01-01-2019',
             status: AppointmentStatusEnum.closed,
             time: '15:00',
+            timestamp: 1234567890,
             diagnosis: 'Diagnosis',
         },
         {
@@ -24,6 +25,7 @@ export const Default = () => {
             date: '01-01-2019',
             status: AppointmentStatusEnum.closed,
             time: '15:00',
+            timestamp: 1234567890,
             diagnosis: 'Diagnosis',
         },
         {
@@ -32,6 +34,7 @@ export const Default = () => {
             date: '01-01-2019',
             status: AppointmentStatusEnum.closed,
             time: '15:00',
+            timestamp: 1234567890,
             diagnosis: 'Diagnosis',
         },
         {
@@ -40,6 +43,7 @@ export const Default = () => {
             date: '25-01-2019',
             status: AppointmentStatusEnum.cancelled,
             time: '15:00',
+            timestamp: 1234567890,
         },
         {
             $key: '222',
@@ -47,6 +51,7 @@ export const Default = () => {
             date: '01-02-2019',
             status: AppointmentStatusEnum.open,
             time: '15:00',
+            timestamp: 1234567890,
         },
     ];
 
