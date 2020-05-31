@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { Tabs, Row, Col, Button, Skeleton } from 'antd';
 import { Store } from 'antd/lib/form/interface';
@@ -26,6 +26,7 @@ interface Props extends RouteComponentProps {
 
 const FillAppointment: React.FC<Props> = ({ storyKey, appointmentKey }) => {
     const { response: storyResponse, api: storyApi } = useStory(storyKey as string);
+    const [activeTab, setActiveTab] = useState(0);
     const tabPosition = useTabsPosition();
 
     const { TabPane } = Tabs;
@@ -33,6 +34,70 @@ const FillAppointment: React.FC<Props> = ({ storyKey, appointmentKey }) => {
 
     const handlePatientUpdate = (patientInfo: Store) => {
         storyApi.updatePatientInfo(patientInfo as Patient);
+    };
+
+    const renderedComponentsInForm = [
+        {
+            title: 'Datos personales',
+            component: (
+                <Skeleton loading={loadingData} active={true}>
+                    {storyResponse.data && (
+                        <PatientDetails data={storyResponse.data.patient} onValuesChange={handlePatientUpdate} />
+                    )}
+                </Skeleton>
+            ),
+        },
+        {
+            title: 'Motivo de consulta',
+            component: <ConsultationReason />,
+        },
+        {
+            title: 'Resultado de laboratorio y RX',
+            component: <LabResults />,
+        },
+        {
+            title: 'Revisión por sistema',
+            component: <SystemReview />,
+        },
+        {
+            title: 'Antecedentes personales',
+            component: <PersonalHistory />,
+        },
+        {
+            title: 'Antecedentes familiares',
+            component: <FamilyHistory />,
+        },
+        {
+            title: 'Signos vitales',
+            component: <VitalSigns />,
+        },
+        {
+            title: 'Exámen fisico',
+            component: <PhysicalExam />,
+        },
+        {
+            title: 'Diagnóstico',
+            component: <Diagnosis />,
+        },
+        {
+            title: 'Tratamiento',
+            component: <Treatment />,
+        },
+        {
+            title: 'Descargables',
+            component: <Downloadables />,
+        },
+    ];
+
+    const handleTabClick = (key: string) => {
+        setActiveTab(Number(key));
+    };
+
+    const isNextEnabled = Number(activeTab) !== renderedComponentsInForm.length - 1;
+
+    const handleNextTabClick = () => {
+        const nextTab = (activeTab + 1) % renderedComponentsInForm.length;
+        setActiveTab(nextTab);
     };
 
     return (
@@ -43,47 +108,21 @@ const FillAppointment: React.FC<Props> = ({ storyKey, appointmentKey }) => {
                 </Skeleton>
             </h1>
 
-            <Tabs defaultActiveKey="1" tabPosition={tabPosition}>
-                <TabPane tab="Datos personales" key={'1'} disabled={loadingData}>
-                    <Skeleton loading={loadingData} active={true}>
-                        {storyResponse.data && (
-                            <PatientDetails data={storyResponse.data.patient} onValuesChange={handlePatientUpdate} />
-                        )}
-                    </Skeleton>
-                </TabPane>
-                <TabPane tab="Motivo de Consulta" key={'2'} disabled={loadingData}>
-                    <ConsultationReason />
-                </TabPane>
-                <TabPane tab="Resultado de laboratorio y RX" key={'3'} disabled={loadingData}>
-                    <LabResults />
-                </TabPane>
-                <TabPane tab="Revisión por sistema" key={'4'} disabled={loadingData}>
-                    <SystemReview />
-                </TabPane>
-                <TabPane tab="Antecedentes personales" key={'5'} disabled={loadingData}>
-                    <PersonalHistory />
-                </TabPane>
-                <TabPane tab="Antecedentes familiares" key={'6'} disabled={loadingData}>
-                    <FamilyHistory />
-                </TabPane>
-                <TabPane tab="Signos vitales" key={'7'} disabled={loadingData}>
-                    <VitalSigns />
-                </TabPane>
-                <TabPane tab="Exámen fisico" key={'8'} disabled={loadingData}>
-                    <PhysicalExam />
-                </TabPane>
-                <TabPane tab="Diagnóstico" key={'9'} disabled={loadingData}>
-                    <Diagnosis />
-                </TabPane>
-                <TabPane tab="Tratamiento" key={'10'} disabled={loadingData}>
-                    <Treatment />
-                </TabPane>
-                <TabPane tab="Descargables" key={'11'} disabled={loadingData}>
-                    <Downloadables />
-                </TabPane>
+            <Tabs tabPosition={tabPosition} activeKey={String(activeTab)} onTabClick={handleTabClick}>
+                {renderedComponentsInForm.map(({ title, component }, index) => (
+                    <TabPane tab={title} key={String(index)} disabled={loadingData}>
+                        {component}
+                    </TabPane>
+                ))}
             </Tabs>
             <Row justify="end">
-                <Col>{loadingData ? <Skeleton.Button active /> : <Button>Siguiente</Button>}</Col>
+                <Col>
+                    {loadingData ? (
+                        <Skeleton.Button active />
+                    ) : (
+                        isNextEnabled && <Button onClick={handleNextTabClick}>Siguiente</Button>
+                    )}
+                </Col>
             </Row>
         </>
     );

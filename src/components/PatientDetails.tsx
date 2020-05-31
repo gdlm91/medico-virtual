@@ -52,6 +52,7 @@ const PatientDetails: React.FC<Props> = ({ data, onFinish, onValuesChange, child
             const store = patientToStore(data);
 
             formRef.setFieldsValue(store);
+            setAge(store.age);
         }
     }, [formRef, data]);
 
