@@ -17,8 +17,13 @@ export interface Patient {
     job?: string;
 }
 
+export interface AppointmentFormReason {
+    reason?: string;
+    sickness?: string;
+}
+
 export interface AppointmentForm {
-    text: string;
+    reason?: AppointmentFormReason;
 }
 
 export enum AppointmentStatusEnum {
@@ -37,6 +42,7 @@ export interface Appointment {
     diagnosis?: string;
     status: AppointmentStatusEnum;
     timestamp: number;
+    form?: AppointmentForm;
 }
 
 export interface Story {

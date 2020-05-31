@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { Tabs, Row, Col, Button, Skeleton } from 'antd';
-import { Store } from 'antd/lib/form/interface';
 
-import { Patient } from './types';
+import { Patient, AppointmentForm } from './types';
 import useTabsPosition from './hooks/useTabPosition';
 import useStory from './hooks/useStory';
 import PatientDetails from './components/PatientDetails';
-import ConsultationReason from './components/ConsultationReason';
+import AppointmentReason from './components/AppointmentReason';
 import LabResults from './components/LabResults';
 import SystemReview from './components/SystemReview';
 import PersonalHistory from './components/PersonalHistory';
@@ -18,22 +17,28 @@ import Treatment from './components/Treatment';
 import Downloadables from './components/Downloadables';
 import VitalSigns from './components/VitalSigns';
 import './FillAppointment.css';
+import useAppointment from './hooks/useAppointment';
+import useAppointmentForm from './hooks/useAppointmentForm';
 
 interface Props extends RouteComponentProps {
     storyKey?: string;
     appointmentKey?: string;
 }
 
-const FillAppointment: React.FC<Props> = ({ storyKey, appointmentKey }) => {
-    const { response: storyResponse, api: storyApi } = useStory(storyKey as string);
+const FillAppointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) => {
+    const { response: storyResponse, api: storyApi } = useStory(storyKey);
+    const { response: appointmentResponse } = useAppointment(storyKey, appointmentKey);
+    const { response: appointmentFormResponse, api: appointmentFormApi } = useAppointmentForm(storyKey, appointmentKey);
     const [activeTab, setActiveTab] = useState(0);
     const tabPosition = useTabsPosition();
+    const loadingData = !storyResponse.data && !appointmentResponse.data && !appointmentFormResponse.data;
 
-    const { TabPane } = Tabs;
-    const loadingData = !storyResponse.data;
+    const handlePatientUpdate = (patientInfo: Patient) => {
+        storyApi.updatePatientInfo(patientInfo);
+    };
 
-    const handlePatientUpdate = (patientInfo: Store) => {
-        storyApi.updatePatientInfo(patientInfo as Patient);
+    const handleOnAppointmentUpdate = (appointmentForm: AppointmentForm, step: keyof AppointmentForm) => {
+        appointmentFormApi.updateForm(appointmentForm, step);
     };
 
     const renderedComponentsInForm = [
@@ -49,7 +54,12 @@ const FillAppointment: React.FC<Props> = ({ storyKey, appointmentKey }) => {
         },
         {
             title: 'Motivo de consulta',
-            component: <ConsultationReason />,
+            component: (
+                <AppointmentReason
+                    data={appointmentFormResponse.data?.reason}
+                    onValuesChange={handleOnAppointmentUpdate}
+                />
+            ),
         },
         {
             title: 'Resultado de laboratorio y RX',
@@ -110,9 +120,9 @@ const FillAppointment: React.FC<Props> = ({ storyKey, appointmentKey }) => {
 
             <Tabs tabPosition={tabPosition} activeKey={String(activeTab)} onTabClick={handleTabClick}>
                 {renderedComponentsInForm.map(({ title, component }, index) => (
-                    <TabPane tab={title} key={String(index)} disabled={loadingData}>
+                    <Tabs.TabPane tab={title} key={String(index)} disabled={loadingData}>
                         {component}
-                    </TabPane>
+                    </Tabs.TabPane>
                 ))}
             </Tabs>
             <Row justify="end">

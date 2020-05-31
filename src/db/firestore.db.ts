@@ -83,3 +83,25 @@ export const add = <T>(path: string, data: T): Promise<firebase.firestore.Docume
 
     return collectionRef.add(data);
 };
+
+const create = (path: string) => {
+    const docRef = db.doc(path);
+
+    return docRef.set({});
+};
+
+export const exists = async (path: string): Promise<boolean> => {
+    const documentRef = db.doc(path);
+
+    const doc = await documentRef.get();
+
+    return doc.exists;
+};
+
+export const createIfUndefined = async (path: string) => {
+    const docExists = await exists(path);
+
+    if (!docExists) {
+        await create(path);
+    }
+};
