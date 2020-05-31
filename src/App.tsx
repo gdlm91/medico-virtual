@@ -78,8 +78,8 @@ function App() {
                         <Agenda path="/" />
                         <History path="/stories">
                             <HistoryDetails path=":storyKey" />
-                            <FillAppointment path=":storyKey/appointments/:appointmentKey" />
                         </History>
+                        <FillAppointment path="/stories/:storyKey/appointments/:appointmentKey" />
                         <DoctorProfile path="/profile" />
                         <Api path="/api" />
                     </Router>

@@ -65,7 +65,7 @@ const History: React.FC<RouteComponentProps> = ({ children, navigate }) => {
                 </Col>
             </Row>
 
-            <div style={{ paddingTop: '30px' }}>{children}</div>
+            <div>{children}</div>
         </>
     );
 };

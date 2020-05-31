@@ -7,7 +7,8 @@ import { Patient } from '../types';
 interface Props {
     data?: Patient;
     disabled?: boolean;
-    onFinish: (value: Store) => void;
+    onFinish?: (value: Patient) => void;
+    onValuesChange?: (value: Patient) => void;
 }
 
 const getAge = (birthday: Moment | null) => {
@@ -17,23 +18,40 @@ const getAge = (birthday: Moment | null) => {
     return moment().diff(birthday, 'year');
 };
 
-const PatientDetails: React.FC<Props> = ({ data, onFinish, children, disabled }) => {
+const storeToPatient = (values: Store): Patient => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { birthday, age, ...patient } = values;
+
+    // format back to a string
+    const birthdayStr = (birthday as Moment).format('DD-MM-YYYY');
+
+    return {
+        ...(patient as Patient),
+        birthday: birthdayStr,
+    };
+};
+
+const patientToStore = (values: Patient): Store => {
+    const birthday = values.birthday && moment(values.birthday, 'DD-MM-YYYY');
+    const age = birthday && getAge(birthday);
+
+    return {
+        ...values,
+        birthday,
+        age,
+    };
+};
+
+const PatientDetails: React.FC<Props> = ({ data, onFinish, onValuesChange, children, disabled }) => {
     const [formRef] = Form.useForm();
     const [age, setAge] = useState(0);
     const { Option, OptGroup } = Select;
 
     useEffect(() => {
         if (data) {
-            const birthday = moment(data.birthday, 'DD-MM-YYYY');
-            const age = getAge(birthday);
+            const store = patientToStore(data);
 
-            formRef.setFieldsValue({
-                ...data,
-                birthday,
-                age,
-            });
-
-            setAge(age);
+            formRef.setFieldsValue(store);
         }
     }, [formRef, data]);
 
@@ -42,14 +60,19 @@ const PatientDetails: React.FC<Props> = ({ data, onFinish, children, disabled })
     }, [age, formRef]);
 
     const handleOnFinish = (values: Store) => {
-        // format back to a string
-        const birthday = (values.birthday as Moment).format('DD-MM-YYYY');
+        if (!onFinish) {
+            return;
+        }
 
-        onFinish({
-            ...(values as Patient),
-            age: null, // no need to store the age
-            birthday,
-        });
+        onFinish(storeToPatient(values));
+    };
+
+    const handleOnValuesChange = (changedValues: Store, allValues: Store) => {
+        if (!onValuesChange) {
+            return;
+        }
+
+        onValuesChange(storeToPatient(allValues));
     };
 
     const handleBirthdayChange = (date: Moment | null) => {
@@ -58,14 +81,20 @@ const PatientDetails: React.FC<Props> = ({ data, onFinish, children, disabled })
     };
 
     return (
-        <Form form={formRef} layout="vertical" name="patientDetails" onFinish={handleOnFinish}>
+        <Form
+            form={formRef}
+            layout="vertical"
+            name="patientDetails"
+            onFinish={handleOnFinish}
+            onValuesChange={handleOnValuesChange}
+        >
             <Row gutter={16}>
-                <Col span={12}>
+                <Col span={24} lg={16} xl={12}>
                     <Form.Item label="Nombres y Apellidos" name="name" rules={[{ required: true }]}>
                         <Input disabled={disabled} />
                     </Form.Item>
                 </Col>
-                <Col span={6}>
+                <Col span={24} lg={8} xl={6}>
                     <Form.Item label="Pais" name="country" rules={[{ required: true }]}>
                         <Select disabled={disabled}>
                             <OptGroup>
@@ -78,14 +107,12 @@ const PatientDetails: React.FC<Props> = ({ data, onFinish, children, disabled })
                         </Select>
                     </Form.Item>
                 </Col>
-                <Col span={6}>
+                <Col span={24} lg={8} xl={6}>
                     <Form.Item label="Documento" name="id" rules={[{ required: true }]}>
                         <Input disabled={disabled} />
                     </Form.Item>
                 </Col>
-            </Row>
-            <Row gutter={16}>
-                <Col span={6}>
+                <Col span={24} lg={8} xl={6}>
                     <Form.Item label="Fecha de nacimiento" name="birthday" rules={[{ required: true }]}>
                         <DatePicker
                             disabled={disabled}
@@ -95,12 +122,12 @@ const PatientDetails: React.FC<Props> = ({ data, onFinish, children, disabled })
                         />
                     </Form.Item>
                 </Col>
-                <Col span={6}>
+                <Col span={24} lg={8} xl={6}>
                     <Form.Item label="Edad" name="age">
                         <Input value={age} disabled />
                     </Form.Item>
                 </Col>
-                <Col span={6}>
+                <Col span={24} lg={8} xl={6}>
                     <Form.Item label="Sexo" name="gender">
                         <Select disabled={disabled}>
                             <Option value="femenino">Femenino</Option>
@@ -109,7 +136,7 @@ const PatientDetails: React.FC<Props> = ({ data, onFinish, children, disabled })
                         </Select>
                     </Form.Item>
                 </Col>
-                <Col span={6}>
+                <Col span={24} lg={8} xl={6}>
                     <Form.Item label="Estado civil" name="maritalStatus">
                         <Select disabled={disabled}>
                             <Option value="soltero">Soltero</Option>
@@ -119,9 +146,7 @@ const PatientDetails: React.FC<Props> = ({ data, onFinish, children, disabled })
                         </Select>
                     </Form.Item>
                 </Col>
-            </Row>
-            <Row gutter={16}>
-                <Col span={6}>
+                <Col span={24} lg={8} xl={6}>
                     <Form.Item label="Tipo de sangre" name="bloodType">
                         <Select disabled={disabled}>
                             <Option value="A positivo">A Positiva (A+)</Option>
@@ -135,26 +160,22 @@ const PatientDetails: React.FC<Props> = ({ data, onFinish, children, disabled })
                         </Select>
                     </Form.Item>
                 </Col>
-                <Col span={6}>
+                <Col span={24} lg={8} xl={6}>
                     <Form.Item label="Numero telefónico" name="phone" rules={[{ required: true }]}>
                         <Input disabled={disabled} />
                     </Form.Item>
                 </Col>
-                <Col span={12}>
+                <Col span={24} lg={16} xl={12}>
                     <Form.Item label="Correo electronico" name="email" rules={[{ required: true }]}>
                         <Input disabled={disabled} />
                     </Form.Item>
                 </Col>
-            </Row>
-            <Row>
                 <Col span={24}>
                     <Form.Item label="Dirección" name="address">
                         <Input disabled={disabled} />
                     </Form.Item>
                 </Col>
-            </Row>
-            <Row>
-                <Col span={12}>
+                <Col span={24} lg={16} xl={12}>
                     <Form.Item label="Ocupación" name="job">
                         <Input disabled={disabled} />
                     </Form.Item>
