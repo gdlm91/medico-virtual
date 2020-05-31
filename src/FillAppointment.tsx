@@ -5,6 +5,9 @@ import { Tabs, Row, Col, Button, Skeleton } from 'antd';
 import { Patient, AppointmentForm } from './types';
 import useTabsPosition from './hooks/useTabPosition';
 import useStory from './hooks/useStory';
+import useAppointment from './hooks/useAppointment';
+import useAppointmentForm from './hooks/useAppointmentForm';
+
 import PatientDetails from './components/PatientDetails';
 import AppointmentReason from './components/AppointmentReason';
 import LabResults from './components/LabResults';
@@ -16,9 +19,6 @@ import Diagnosis from './components/Diagnosis';
 import Treatment from './components/Treatment';
 import Downloadables from './components/Downloadables';
 import VitalSigns from './components/VitalSigns';
-import './FillAppointment.css';
-import useAppointment from './hooks/useAppointment';
-import useAppointmentForm from './hooks/useAppointmentForm';
 
 interface Props extends RouteComponentProps {
     storyKey?: string;
@@ -63,7 +63,9 @@ const FillAppointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }
         },
         {
             title: 'Resultado de laboratorio y RX',
-            component: <LabResults />,
+            component: (
+                <LabResults data={appointmentFormResponse.data?.results} onValuesChange={handleOnAppointmentUpdate} />
+            ),
         },
         {
             title: 'Revisión por sistema',
@@ -130,7 +132,11 @@ const FillAppointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }
                     {loadingData ? (
                         <Skeleton.Button active />
                     ) : (
-                        isNextEnabled && <Button onClick={handleNextTabClick}>Siguiente</Button>
+                        isNextEnabled && (
+                            <Button onClick={handleNextTabClick} style={{ marginTop: '15px' }}>
+                                Siguiente
+                            </Button>
+                        )
                     )}
                 </Col>
             </Row>

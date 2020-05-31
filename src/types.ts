@@ -22,8 +22,20 @@ export interface AppointmentFormReason {
     sickness?: string;
 }
 
+export interface AppointmentFormResults {
+    lab?: {
+        date: string;
+        observations: string;
+    };
+    images?: {
+        date: string;
+        observations: string;
+    };
+}
+
 export interface AppointmentForm {
     reason?: AppointmentFormReason;
+    results?: AppointmentFormResults;
 }
 
 export enum AppointmentStatusEnum {
