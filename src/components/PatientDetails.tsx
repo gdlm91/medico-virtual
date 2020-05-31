@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { debounce } from 'debounce';
 import { Row, Col, Input, Select, Form, DatePicker } from 'antd';
 import moment, { Moment } from 'moment';
 import { Store } from 'antd/lib/form/interface';
+
 import { Patient } from '../types';
 
 interface Props {
@@ -47,6 +49,35 @@ const PatientDetails: React.FC<Props> = ({ data, onFinish, onValuesChange, child
     const [age, setAge] = useState(0);
     const { Option, OptGroup } = Select;
 
+    const handleOnFinish = (values: Store) => {
+        if (!onFinish) {
+            return;
+        }
+
+        onFinish(storeToPatient(values));
+    };
+
+    const handleOnValuesChange = useCallback(
+        debounce((changedValues: Store, allValues: Store) => {
+            if (!onValuesChange) {
+                return;
+            }
+
+            onValuesChange(storeToPatient(allValues));
+        }, 5000),
+        [onValuesChange],
+    );
+
+    const handleBirthdayChange = (date: Moment | null) => {
+        const age = getAge(date);
+        setAge(age);
+    };
+
+    useEffect(() => {
+        // trigger any debonced update before destroying
+        return () => handleOnValuesChange.flush();
+    }, [handleOnValuesChange]);
+
     useEffect(() => {
         if (data) {
             const store = patientToStore(data);
@@ -59,27 +90,6 @@ const PatientDetails: React.FC<Props> = ({ data, onFinish, onValuesChange, child
     useEffect(() => {
         formRef.setFieldsValue({ age });
     }, [age, formRef]);
-
-    const handleOnFinish = (values: Store) => {
-        if (!onFinish) {
-            return;
-        }
-
-        onFinish(storeToPatient(values));
-    };
-
-    const handleOnValuesChange = (changedValues: Store, allValues: Store) => {
-        if (!onValuesChange) {
-            return;
-        }
-
-        onValuesChange(storeToPatient(allValues));
-    };
-
-    const handleBirthdayChange = (date: Moment | null) => {
-        const age = getAge(date);
-        setAge(age);
-    };
 
     return (
         <Form

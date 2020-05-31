@@ -1,15 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { debounce } from 'debounce';
 import { UseResponse } from './useResponse';
 
 const createApiFn = <T,>(
     apiFn: (...args: any[]) => Promise<T | void>,
     response: UseResponse<T>[0],
     setResponse: UseResponse<T>[1],
-    debounceTime = 5000,
     emitResult = true,
 ) => {
-    return debounce(async (...args: any[]) => {
+    return async (...args: any[]) => {
         if (response.loading) return;
 
         setResponse({ loading: true });
@@ -22,7 +20,7 @@ const createApiFn = <T,>(
         } catch (error) {
             setResponse({ loading: false, error });
         }
-    }, debounceTime);
+    };
 };
 
 export default createApiFn;
