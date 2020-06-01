@@ -13,3 +13,23 @@ export const SystemReviewOptions = {
     Neurologico: 'Neurologico',
     NiegaRevisionPorSistema: 'NiegaRevisionPorSistema',
 };
+
+export const PersonalHistoryOptions = {
+    perinatales: 'Perinatales',
+    desarrolloPsicomotor: 'Desarrollo psicomotor',
+    patalogicos: 'Patalogicos',
+    alergico: 'Alergico',
+    traumaticos: 'Traumaticos',
+    venereas: 'Venereas',
+    ginecoObstetricos: 'Gineco-Obstetricos',
+    fechaDeUltimaRegla: 'Fecha de ultima regla',
+    fechaDeUltimoParto: 'Fecha de ultimo parto',
+    fechaDeUltimaCitologia: 'Fecha de ultima citologia',
+    fechaDeUltimaMamografia: 'Fecha de Ultima mamografia',
+    hospitalizaciones: 'Hospitalizaciones',
+    farmacologicos: 'Farmacologicos',
+    cocinoConLena: 'Cocino con leña',
+    tabaco: 'Tabaco',
+    cancer: 'Cancer',
+    niegaAntecedentePersonales: 'Niega antecedentes personales',
+};

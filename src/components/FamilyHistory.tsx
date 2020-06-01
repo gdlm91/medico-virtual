@@ -1,7 +1,6 @@
 import React from 'react';
 import { Form, Table } from 'antd';
 import SelectList from './SelectList';
-import './PersonalHistory.css';
 
 const FamilyHistory: React.FC = () => {
     const options = {
@@ -51,12 +50,11 @@ const FamilyHistory: React.FC = () => {
 
     return (
         <>
-            <Form layout="vertical" onFinish={console.log}>
+            <Form layout="vertical" onFinish={console.log} style={{ marginBottom: '30px' }}>
                 <SelectList name="antecedentesFamiliares" label="Antecedente" options={options}></SelectList>
             </Form>
-            <div className="table">
-                <Table columns={columns} dataSource={data} size="small" />
-            </div>
+
+            <Table columns={columns} dataSource={data} size="small" />
         </>
     );
 };

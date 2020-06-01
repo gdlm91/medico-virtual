@@ -40,10 +40,13 @@ export interface AppointmentFormResults {
 
 export type AppointmentFormSystemReview = SelectListRecord[];
 
+export type AppointmentFormPersonalHistory = SelectListRecord[];
+
 export interface AppointmentForm {
     reason?: AppointmentFormReason;
     results?: AppointmentFormResults;
     systemReview?: AppointmentFormSystemReview;
+    personalHistory?: AppointmentFormPersonalHistory;
 }
 
 export enum AppointmentStatusEnum {

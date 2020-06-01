@@ -78,7 +78,12 @@ const FillAppointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }
         },
         {
             title: 'Antecedentes personales',
-            component: <PersonalHistory />,
+            component: (
+                <PersonalHistory
+                    data={appointmentFormResponse.data?.personalHistory}
+                    onValuesChange={handleOnAppointmentUpdate}
+                />
+            ),
         },
         {
             title: 'Antecedentes familiares',
