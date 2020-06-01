@@ -33,3 +33,13 @@ export const PersonalHistoryOptions = {
     cancer: 'Cancer',
     niegaAntecedentePersonales: 'Niega antecedentes personales',
 };
+
+export const FamilyHistoryOptions = {
+    patalogicos: 'Patalogicos',
+    alergico: 'Alergico',
+    rraumaticos: 'Traumaticos',
+    venereas: 'Venereas',
+    cancer: 'Cancer',
+    quirurjico: 'Quirurjico',
+    niegaAntecedentePersonales: 'Niega antecedentes personales',
+};

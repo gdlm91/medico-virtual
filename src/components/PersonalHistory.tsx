@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect } from 'react';
 import { Form, Table } from 'antd';
 import SelectList from './SelectList';
-import { PersonalHistoryOptions } from '../db/constants';
 import { debounce } from 'debounce';
 import { Store } from 'antd/lib/form/interface';
+
+import { PersonalHistoryOptions } from '../db/constants';
 import { AppointmentForm, AppointmentFormPersonalHistory } from '../types';
 
 const columns = [
@@ -53,7 +54,6 @@ const PersonalHistory: React.FC<Props> = ({ data, onValuesChange }) => {
 
     const handleOnValuesChange = useCallback(
         debounce((changedValues: Store, { personalHistory }: Store) => {
-            console.log(personalHistory);
             if (!onValuesChange) {
                 return;
             }
