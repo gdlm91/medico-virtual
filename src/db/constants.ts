@@ -1,0 +1,15 @@
+export const SystemReviewOptions = {
+    piel: 'Piel',
+    cabeza: 'Cabeza',
+    Otorrinolaringologia: 'Otorrinolaringologia',
+    Ojos: 'Ojos',
+    Cuello: 'Cuello',
+    Torax: 'Torax',
+    Mamas: 'Mamas',
+    Cardiovascular: 'Cardiovascular',
+    Abdomen: 'Abdomen',
+    Genital: 'Genital',
+    Extremidades: 'Extremidades',
+    Neurologico: 'Neurologico',
+    NiegaRevisionPorSistema: 'NiegaRevisionPorSistema',
+};

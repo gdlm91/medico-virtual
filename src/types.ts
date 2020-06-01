@@ -3,6 +3,11 @@ export enum Entities {
     'appointments' = 'appointments',
 }
 
+export interface SelectListRecord {
+    key: string;
+    observation: string;
+}
+
 export interface Patient {
     name: string;
     country: string;
@@ -33,9 +38,12 @@ export interface AppointmentFormResults {
     };
 }
 
+export type AppointmentFormSystemReview = SelectListRecord[];
+
 export interface AppointmentForm {
     reason?: AppointmentFormReason;
     results?: AppointmentFormResults;
+    systemReview?: AppointmentFormSystemReview;
 }
 
 export enum AppointmentStatusEnum {

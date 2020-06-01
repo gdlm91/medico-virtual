@@ -20,7 +20,7 @@ const SelectList: React.FC<Props> = ({ options, name, label }) => {
                     {fields.map((field) => (
                         <Row gutter={16} key={field.key}>
                             <Col span={8}>
-                                <Form.Item label={label} name={[field.name, label.toLowerCase()]}>
+                                <Form.Item label={label} name={[field.name, 'key']}>
                                     <Select>
                                         {Object.entries(options).map(([value, label]) => (
                                             <Option key={value} value={value}>
@@ -31,7 +31,7 @@ const SelectList: React.FC<Props> = ({ options, name, label }) => {
                                 </Form.Item>
                             </Col>
                             <Col span={14}>
-                                <Form.Item label="Observación" name={[field.name, 'observacion']}>
+                                <Form.Item label="Observación" name={[field.name, 'observation']}>
                                     <TextArea autoSize={{ minRows: 5, maxRows: 5 }} />
                                 </Form.Item>
                             </Col>

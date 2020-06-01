@@ -69,7 +69,12 @@ const FillAppointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }
         },
         {
             title: 'Revisión por sistema',
-            component: <SystemReview />,
+            component: (
+                <SystemReview
+                    data={appointmentFormResponse.data?.systemReview}
+                    onValuesChange={handleOnAppointmentUpdate}
+                />
+            ),
         },
         {
             title: 'Antecedentes personales',

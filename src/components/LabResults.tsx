@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Checkbox, DatePicker, Form, Row, Col, Input } from 'antd';
+import { Store } from 'antd/lib/form/interface';
 import { debounce } from 'debounce';
+import moment, { Moment } from 'moment';
 
 import { AppointmentForm, AppointmentFormResults } from '../types';
-import { Store } from 'antd/lib/form/interface';
-import moment, { Moment } from 'moment';
 
 interface Props {
     data?: AppointmentFormResults;
