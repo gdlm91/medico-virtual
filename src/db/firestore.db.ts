@@ -12,6 +12,16 @@ const db = app.firestore();
 
 export type FirestoreQuery = [string | firebase.firestore.FieldPath, firebase.firestore.WhereFilterOp, unknown];
 
+export interface QueryOptions {
+    queries?: FirestoreQuery[];
+    sorters?: [string, 'desc' | 'asc' | undefined][];
+}
+
+const defaultQueryOptions: QueryOptions = {
+    queries: [],
+    sorters: [],
+};
+
 export function snapToData(snapshot: firebase.firestore.DocumentSnapshot): {} {
     return {
         ...snapshot.data(),
@@ -20,21 +30,35 @@ export function snapToData(snapshot: firebase.firestore.DocumentSnapshot): {} {
     };
 }
 
-export const list = <T>(path: string, queries: FirestoreQuery[] = []): Observable<T[]> => {
+export const list = <T>(
+    path: string,
+    { queries = [], sorters = [] }: QueryOptions = defaultQueryOptions,
+): Observable<T[]> => {
     let colRefQuery: firebase.firestore.Query = db.collection(path);
 
     queries.forEach((query) => {
         colRefQuery = colRefQuery.where(...query);
     });
 
-    return collection(db.collection(path)).pipe(map((docs) => docs.map((doc) => snapToData(doc) as T)));
+    sorters.forEach(([field, order]) => {
+        colRefQuery = colRefQuery.orderBy(field, order);
+    });
+
+    return collection(colRefQuery).pipe(map((docs) => docs.map((doc) => snapToData(doc) as T)));
 };
 
-export const listAll = <T>(path: string, queries: FirestoreQuery[] = []): Observable<T[]> => {
+export const listAll = <T>(
+    path: string,
+    { queries = [], sorters = [] }: QueryOptions = defaultQueryOptions,
+): Observable<T[]> => {
     let colRefQuery: firebase.firestore.Query = db.collectionGroup(path);
 
     queries.forEach((query) => {
         colRefQuery = colRefQuery.where(...query);
+    });
+
+    sorters.forEach(([field, order]) => {
+        colRefQuery = colRefQuery.orderBy(field, order);
     });
 
     return collection(colRefQuery).pipe(map((docs) => docs.map((doc) => snapToData(doc) as T)));
@@ -58,4 +82,26 @@ export const add = <T>(path: string, data: T): Promise<firebase.firestore.Docume
     const collectionRef = db.collection(path);
 
     return collectionRef.add(data);
+};
+
+const create = (path: string) => {
+    const docRef = db.doc(path);
+
+    return docRef.set({});
+};
+
+export const exists = async (path: string): Promise<boolean> => {
+    const documentRef = db.doc(path);
+
+    const doc = await documentRef.get();
+
+    return doc.exists;
+};
+
+export const createIfUndefined = async (path: string) => {
+    const docExists = await exists(path);
+
+    if (!docExists) {
+        await create(path);
+    }
 };

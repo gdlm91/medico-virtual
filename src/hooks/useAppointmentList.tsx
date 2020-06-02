@@ -10,7 +10,9 @@ interface UseStoryList {
 
 const useAppointmentList = (storyKey: string): UseStoryList => {
     const path = `${Entities.stories}/${storyKey}/${Entities.appointments}`;
-    const [storyList$, setStoryList$] = useState(list<Appointment>(path));
+    const [storyList$, setStoryList$] = useState(
+        list<Appointment>(path, { sorters: [['timestamp', 'desc']] }),
+    );
     const [response] = useResponse(storyList$);
 
     useEffect(() => {

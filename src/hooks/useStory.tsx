@@ -4,6 +4,7 @@ import { get, update } from '../db/firestore.db';
 import { Entities, Story, Patient } from '../types';
 import useResponse, { Response } from './utils/useResponse';
 import createApiFn from './utils/createApiFn';
+import tokenizePatientData from '../db/utils/tokenizePatientData';
 
 interface StoryAPI {
     updatePatientInfo: (patient: Patient) => void;
@@ -29,7 +30,9 @@ const useStory = (storyKey: string): UseStory => {
                 return;
             }
 
-            return update<Story>(path, { ...response.data, patient });
+            const keywords = tokenizePatientData(response.data.patient);
+
+            return update<Story>(path, { ...response.data, keywords, patient });
         },
         response,
         setResponse,

@@ -1,27 +1,35 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Form } from 'antd';
+import { Store } from 'antd/lib/form/interface';
+
+import { SystemReviewOptions } from '../db/constants';
+import { AppointmentForm, AppointmentFormSystemReview } from '../types';
+import useRealtimeForm from '../hooks/useRealtimeForm';
 import SelectList from './SelectList';
 
-const SystemReview: React.FC = () => {
-    const options = {
-        piel: 'Piel',
-        cabeza: 'Cabeza',
-        Otorrinolaringologia: 'Otorrinolaringologia',
-        Ojos: 'Ojos',
-        Cuello: 'Cuello',
-        Torax: 'Torax',
-        Mamas: 'Mamas',
-        Cardiovascular: 'Cardiovascular',
-        Abdomen: 'Abdomen',
-        Genital: 'Genital',
-        Extremidades: 'Extremidades',
-        Neurologico: 'Neurologico',
-        NiegaRevisionPorSistema: 'NiegaRevisionPorSistema',
-    };
+interface Props {
+    data?: AppointmentFormSystemReview;
+    disabled?: boolean;
+    onValuesChange?: (value: AppointmentForm) => void;
+}
+
+const SystemReview: React.FC<Props> = ({ data, onValuesChange }) => {
+    const transformedData = useMemo(() => {
+        // We need to put the information inside an object for SelectList to work properly
+        return data && ({ systemReview: data } as AppointmentForm);
+    }, [data]);
+    const transformedHandleOnValuesChange = useCallback(
+        (values: Store) => {
+            // We need to take the value out of the nested fields inside systemReview
+            onValuesChange && onValuesChange({ systemReview: values && values['systemReview'] });
+        },
+        [onValuesChange],
+    );
+    const { formRef, handleOnValuesChange } = useRealtimeForm(transformedData, transformedHandleOnValuesChange);
 
     return (
-        <Form layout="vertical">
-            <SelectList name="revisionPorSistema" label="Sistema" options={options}></SelectList>
+        <Form form={formRef} layout="vertical" onValuesChange={handleOnValuesChange}>
+            <SelectList name="systemReview" label="Sistema" options={SystemReviewOptions}></SelectList>
         </Form>
     );
 };

@@ -1,1 +1,10 @@
 @import '~antd/dist/antd.css';
+
+h1 {
+    margin: 30px 0px;
+}
+
+/** overwrite tabs styles */
+.ant-tabs .ant-tabs-left-bar .ant-tabs-tab {
+    text-align: left;
+}

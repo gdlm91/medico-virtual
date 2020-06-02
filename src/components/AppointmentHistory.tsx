@@ -1,31 +1,10 @@
+/* eslint-disable react/display-name */
 import React from 'react';
 import { Table } from 'antd';
-import { ColumnsType } from 'antd/lib/table';
 
-import { Appointment } from '../types';
+import { Appointment, AppointmentStatusEnum } from '../types';
 import AppointmentStatus from './AppointmentStatus';
-
-type ColumnsProps = ColumnsType<Appointment>;
-
-interface DynamicCellProps {
-    title: React.ReactNode;
-    dynamic: boolean;
-    dataIndex: string;
-    record: Appointment;
-}
-
-const DynamicCell: React.FC<DynamicCellProps> = ({ dynamic, children, record = {} }) => {
-    const childNode = !dynamic ? (
-        children
-    ) : (
-        <div>{record.diagnosis || (record.status && <AppointmentStatus status={record.status} />)}</div>
-    );
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { $key, ...restProps } = record;
-
-    return <td {...restProps}>{childNode}</td>;
-};
+import { Link } from '@reach/router';
 
 interface Props {
     appointments?: Appointment[];
@@ -37,43 +16,26 @@ const AppointmentHistory: React.FC<Props> = ({ appointments }) => {
             title: 'Fecha',
             dataIndex: 'date',
             width: '20%',
+            render: (date: string, record: Appointment) => {
+                return record.status !== AppointmentStatusEnum.cancelled &&
+                    record.status !== AppointmentStatusEnum.pending ? (
+                    <Link style={{ cursor: 'pointer' }} to={`/${record.$path}`}>
+                        {date}
+                    </Link>
+                ) : (
+                    <span>{date}</span>
+                );
+            },
         },
         {
             title: 'Diagnóstico',
-            dynamic: true,
+            render: (_: unknown, record: Appointment) => (
+                <span>{record.diagnosis || (record.status && <AppointmentStatus status={record.status} />)}</span>
+            ),
         },
     ];
-    const components = {
-        body: {
-            cell: DynamicCell,
-        },
-    };
 
-    const columnsProps: ColumnsProps = columns.map((col) => {
-        if (!col.dynamic) {
-            return col;
-        }
-
-        return {
-            ...col,
-            onCell: (record) => ({
-                record,
-                dynamic: col.dynamic,
-                dataIndex: col.dataIndex,
-                title: col.title,
-            }),
-        };
-    });
-
-    return (
-        <Table
-            pagination={false}
-            components={components}
-            rowKey="$key"
-            dataSource={appointments}
-            columns={columnsProps}
-        />
-    );
+    return <Table pagination={false} rowKey="$key" dataSource={appointments} columns={columns} />;
 };
 
 AppointmentHistory.defaultProps = {
