@@ -81,3 +81,19 @@ export const VitalSignOptions = [
         unit: 'MMHG',
     },
 ];
+
+export const PhysicalExamOptions = {
+    condicionesGenerales: 'Condiciones generales',
+    Piel: 'Piel',
+    Cabeza: 'Cabeza',
+    Otorrinolaringologia: 'Otorrinolaringologia',
+    Ojos: 'Ojos',
+    Cuello: 'Cuello',
+    Torax: 'Torax',
+    Mama: 'Mama',
+    Cardiovascular: 'Cardiovascular',
+    Abdomen: 'Abdomen',
+    Extremidades: 'Extremidades',
+    Genitourinario: 'Genitourinario',
+    Neurologico: 'Neurologico',
+};

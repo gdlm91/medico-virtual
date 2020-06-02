@@ -1,26 +1,46 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Form } from 'antd';
-import SelectList from './SelectList';
 
-const PhysicalExam: React.FC = () => {
-    const options = {
-        condicionesGenerales: 'Condiciones generales',
-        Piel: 'Piel',
-        Cabeza: 'Cabeza',
-        Otorrinolaringologia: 'Otorrinolaringologia',
-        Ojos: 'Ojos',
-        Cuello: 'Cuello',
-        Torax: 'Torax',
-        Mama: 'Mama',
-        Cardiovascular: 'Cardiovascular',
-        Abdomen: 'Abdomen',
-        Extremidades: 'Extremidades',
-        Genitourinario: 'Genitourinario',
-        Neurologico: 'Neurologico',
-    };
+import { PhysicalExamOptions } from '../db/constants';
+import SelectList from './SelectList';
+import { AppointmentFormPhysicalExam, AppointmentForm } from '../types';
+import { debounce } from 'debounce';
+import { Store } from 'antd/lib/form/interface';
+
+interface Props {
+    data?: AppointmentFormPhysicalExam;
+    disabled?: boolean;
+    onValuesChange?: (value: AppointmentForm, step: keyof AppointmentForm) => void;
+}
+
+const PhysicalExam: React.FC<Props> = ({ data, onValuesChange }) => {
+    const [formRef] = Form.useForm();
+
+    const handleOnValuesChange = useCallback(
+        debounce((changedValues: Store, { physicalExam }: Store) => {
+            if (!onValuesChange) {
+                return;
+            }
+
+            onValuesChange({ physicalExam: physicalExam as AppointmentFormPhysicalExam }, 'physicalExam');
+        }, 5000),
+        [onValuesChange],
+    );
+
+    useEffect(() => {
+        // trigger any debonced update before destroying
+        return () => handleOnValuesChange.flush();
+    }, [handleOnValuesChange]);
+
+    useEffect(() => {
+        if (data) {
+            formRef.setFieldsValue({ physicalExam: data });
+        }
+    }, [formRef, data]);
+
     return (
-        <Form layout="vertical" onFinish={console.log}>
-            <SelectList name="examenFisico" label="Examen fisico" options={options}></SelectList>,
+        <Form form={formRef} layout="vertical" onValuesChange={handleOnValuesChange}>
+            <SelectList name="physicalExam" label="Examen fisico" options={PhysicalExamOptions}></SelectList>,
         </Form>
     );
 };

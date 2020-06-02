@@ -105,7 +105,12 @@ const FillAppointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }
         },
         {
             title: 'Exámen fisico',
-            component: <PhysicalExam />,
+            component: (
+                <PhysicalExam
+                    data={appointmentFormResponse.data?.physicalExam}
+                    onValuesChange={handleOnAppointmentUpdate}
+                />
+            ),
         },
         {
             title: 'Diagnóstico',
@@ -121,11 +126,11 @@ const FillAppointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }
         },
     ];
 
+    const isNextEnabled = Number(activeTab) !== renderedComponentsInForm.length - 1;
+
     const handleTabClick = (key: string) => {
         setActiveTab(Number(key));
     };
-
-    const isNextEnabled = Number(activeTab) !== renderedComponentsInForm.length - 1;
 
     const handleNextTabClick = () => {
         const nextTab = (activeTab + 1) % renderedComponentsInForm.length;
