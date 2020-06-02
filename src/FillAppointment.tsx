@@ -96,7 +96,12 @@ const FillAppointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }
         },
         {
             title: 'Signos vitales',
-            component: <VitalSigns />,
+            component: (
+                <VitalSigns
+                    data={appointmentFormResponse.data?.vitalSigns}
+                    onValuesChange={handleOnAppointmentUpdate}
+                />
+            ),
         },
         {
             title: 'Exámen fisico',

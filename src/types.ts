@@ -44,12 +44,17 @@ export type AppointmentFormPersonalHistory = SelectListRecord[];
 
 export type AppointmentFormFamilyHistory = SelectListRecord[];
 
+export type AppointmentFormVitalSigns = {
+    [key: string]: string;
+};
+
 export interface AppointmentForm {
     reason?: AppointmentFormReason;
     results?: AppointmentFormResults;
     systemReview?: AppointmentFormSystemReview;
     personalHistory?: AppointmentFormPersonalHistory;
     familyHistory?: AppointmentFormFamilyHistory;
+    vitalSigns?: AppointmentFormVitalSigns;
 }
 
 export enum AppointmentStatusEnum {

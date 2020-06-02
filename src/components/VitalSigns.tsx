@@ -1,51 +1,36 @@
-import React from 'react';
-import { Table, Input, Form, Button } from 'antd';
-import { ColumnsType } from 'antd/lib/table';
+import React, { useCallback, useEffect } from 'react';
+import { Table, Input, Form } from 'antd';
+import { Store } from 'antd/lib/form/interface';
+import { debounce } from 'debounce';
 
-interface Record {
-    key: string;
-    name: string;
-    unit: string;
+import { VitalSignOptions } from '../db/constants';
+import { AppointmentFormVitalSigns, AppointmentForm } from '../types';
+
+interface Props {
+    data?: AppointmentFormVitalSigns;
+    disabled?: boolean;
+    onValuesChange?: (value: AppointmentForm, step: keyof AppointmentForm) => void;
 }
 
-type ColumnsProps = ColumnsType<Record>;
+const VitalSigns: React.FC<Props> = ({ data, onValuesChange }) => {
+    const [formRef] = Form.useForm();
 
-interface EditableCellProps {
-    title: React.ReactNode;
-    editable: boolean;
-    dataIndex: string;
-    record: Record;
-}
-
-const EditableCell: React.FC<EditableCellProps> = ({ editable, children, record }) => {
-    const childNode = !editable ? (
-        children
-    ) : (
-        <Form.Item
-            style={{
-                margin: 0,
-            }}
-            name={record.key}
-        >
-            <Input />
-        </Form.Item>
-    );
-
-    return <td {...record}>{childNode}</td>;
-};
-
-const VitalSigns: React.FC = () => {
     const columns = [
         {
             title: 'Descripción',
             dataIndex: 'name',
-            width: '30%',
         },
         {
             title: 'Valor',
             dataIndex: 'value',
-            width: '20%',
-            editable: true,
+            // eslint-disable-next-line react/display-name
+            render: (value: string, record: typeof VitalSignOptions[number]) => {
+                return (
+                    <Form.Item name={record.key}>
+                        <Input />
+                    </Form.Item>
+                );
+            },
         },
         {
             title: 'Unidad',
@@ -53,77 +38,37 @@ const VitalSigns: React.FC = () => {
         },
     ];
 
-    const dataSource: Record[] = [
-        {
-            key: 'peso',
-            name: 'Peso',
-            unit: 'Kg',
-        },
-        {
-            key: 'talla',
-            name: 'Talla',
-            unit: 'cm',
-        },
-        {
-            key: 'indiceMasaCorporal',
-            name: 'Indice de masa corporal',
-            unit: 'Kg/m2',
-        },
-        {
-            key: 'temperatura',
-            name: 'Temperatura',
-            unit: 'grados C',
-        },
-        {
-            key: 'frecuenciaCardiaca',
-            name: 'Frecuencia Cardiaca',
-            unit: 'x minutos',
-        },
-        {
-            key: 'frecuenciaRespiratoria',
-            name: 'Frecuencia Respiratoria',
-            unit: 'x minutos',
-        },
-        {
-            key: 'tensionArterial',
-            name: 'Tension arterial',
-            unit: 'MMHG',
-        },
-    ];
+    const handleOnValuesChange = useCallback(
+        debounce((changedValues: Store, allValues: Store) => {
+            if (!onValuesChange) {
+                return;
+            }
 
-    const components = {
-        body: {
-            cell: EditableCell,
-        },
-    };
+            onValuesChange({ vitalSigns: allValues as AppointmentFormVitalSigns }, 'vitalSigns');
+        }, 5000),
+        [onValuesChange],
+    );
 
-    const columnsProps: ColumnsProps = columns.map((col) => {
-        if (!col.editable) {
-            return col;
+    useEffect(() => {
+        // trigger any debonced update before destroying
+        return () => handleOnValuesChange.flush();
+    }, [handleOnValuesChange]);
+
+    useEffect(() => {
+        if (data) {
+            formRef.setFieldsValue(data);
         }
-
-        return {
-            ...col,
-            onCell: (record) => ({
-                record,
-                editable: col.editable,
-                dataIndex: col.dataIndex,
-                title: col.title,
-            }),
-        };
-    });
+    }, [formRef, data]);
 
     return (
-        <Form name="table" onFinish={console.log}>
+        <Form name="form" form={formRef} onValuesChange={handleOnValuesChange}>
             <Table
                 pagination={false}
-                components={components}
-                rowClassName={() => 'editable-row'}
                 bordered
-                dataSource={dataSource}
-                columns={columnsProps}
+                dataSource={VitalSignOptions}
+                columns={columns}
+                style={{ maxWidth: '800px' }}
             />
-            <Button htmlType="submit">Guardar</Button>
         </Form>
     );
 };

@@ -43,3 +43,41 @@ export const FamilyHistoryOptions = {
     quirurjico: 'Quirurjico',
     niegaAntecedentePersonales: 'Niega antecedentes personales',
 };
+
+export const VitalSignOptions = [
+    {
+        key: 'peso',
+        name: 'Peso',
+        unit: 'Kg',
+    },
+    {
+        key: 'talla',
+        name: 'Talla',
+        unit: 'cm',
+    },
+    {
+        key: 'indiceMasaCorporal',
+        name: 'Indice de masa corporal',
+        unit: 'Kg/m2',
+    },
+    {
+        key: 'temperatura',
+        name: 'Temperatura',
+        unit: 'grados C',
+    },
+    {
+        key: 'frecuenciaCardiaca',
+        name: 'Frecuencia Cardiaca',
+        unit: 'x minutos',
+    },
+    {
+        key: 'frecuenciaRespiratoria',
+        name: 'Frecuencia Respiratoria',
+        unit: 'x minutos',
+    },
+    {
+        key: 'tensionArterial',
+        name: 'Tension arterial',
+        unit: 'MMHG',
+    },
+];
