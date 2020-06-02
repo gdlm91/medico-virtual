@@ -78,14 +78,14 @@ function App() {
                         <Agenda path="/" />
                         <History path="/stories">
                             <HistoryDetails path=":storyKey" />
+                            <FillAppointment path=":storyKey/appointments/:appointmentKey" />
                         </History>
                         <DoctorProfile path="/profile" />
-                        <FillAppointment path="/appointment/:key" />
                         <Api path="/api" />
                     </Router>
                 </div>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+            <Footer style={{ textAlign: 'center' }}>Médico Virtual - All rights reserved</Footer>
         </Layout>
     );
 }

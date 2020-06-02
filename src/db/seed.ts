@@ -1,3 +1,5 @@
+import chance from 'chance';
+
 import { Story, Appointment, AppointmentStatusEnum, Patient } from '../types';
 import generateKeywords from './utils/tokenizePatientData';
 
@@ -5,110 +7,54 @@ export interface SeedStory extends Story {
     appointments: Appointment[];
 }
 
-export const getSeedStory1 = (): SeedStory => {
-    const patient: Patient = {
-        birthday: '01-01-1985',
-        country: 'Alemania',
-        email: 'jon@doe.com',
-        gender: 'male',
-        id: '123456789',
-        maritalStatus: 'single',
-        name: 'Jon Doe',
-        phone: '000999888',
-        address: '331/4 Mega Ave, Tumaru',
-        bloodType: 'ORH negative',
-        job: 'Lawyer',
+const generatePatient = (): Patient => ({
+    name: chance().name({ middle: true }),
+    country: chance().country({ full: true }),
+    id: chance().fbid(),
+    birthday: chance().birthday({ string: true, american: false }) as string,
+    phone: chance().phone(),
+    email: chance().email(),
+    gender: chance().pickone(['Masculino', 'Femenino', 'Otro']),
+    address: chance().address(),
+    maritalStatus: chance().pickone(['Soltero', 'Casado', 'Divorciado', 'Viudo']),
+    job: chance().profession(),
+});
+
+const generateAppointment = (): Appointment => {
+    const diagnosis = chance().bool({ likelihood: 70 }) && chance().sentence();
+    const thisYear = new Date().getFullYear();
+
+    const appointment: Appointment = {
+        $key: 'fake',
+        $path: 'fake',
+        status: diagnosis
+            ? AppointmentStatusEnum.closed
+            : chance().pickone([
+                  AppointmentStatusEnum.cancelled,
+                  AppointmentStatusEnum.open,
+                  AppointmentStatusEnum.pending,
+                  AppointmentStatusEnum.waiting,
+              ]),
+        date: chance().date({ string: true, american: false, year: thisYear }) as string,
+        time: `${String(chance().integer({ min: 9, max: 17 })).padStart(2, '0')}:${chance().pickone(['00', '30'])}`,
     };
 
-    return {
-        $key: '1',
-        $path: 'fake/path',
-        patient,
-        keywords: generateKeywords(patient),
-        appointments: [
-            {
-                $key: '1',
-                $path: 'fake/path',
-                date: '05-06-2020',
-                status: AppointmentStatusEnum.waiting,
-                time: '10:00',
-            },
-            {
-                $key: '2',
-                $path: 'fake/path',
-                date: '05-07-2020',
-                status: AppointmentStatusEnum.open,
-                time: '10:00',
-            },
-            {
-                $key: '3',
-                $path: 'fake/path',
-                date: '05-06-2020',
-                status: AppointmentStatusEnum.cancelled,
-                time: '10:00',
-            },
-            {
-                $key: '4',
-                $path: 'fake/path',
-                date: '05-07-2020',
-                status: AppointmentStatusEnum.closed,
-                time: '10:00',
-                diagnosis: 'Un diagnóstico acá',
-            },
-            {
-                $key: '5',
-                $path: 'fake/path',
-                date: '05-06-2020',
-                status: AppointmentStatusEnum.closed,
-                time: '10:00',
-                diagnosis: 'Y otro por acá',
-            },
-            {
-                $key: '6',
-                $path: 'fake/path',
-                date: '05-07-2020',
-                status: AppointmentStatusEnum.pending,
-                time: '10:00',
-            },
-        ],
-    };
+    if (diagnosis) {
+        appointment.diagnosis = diagnosis;
+    }
+
+    return appointment;
 };
 
-export const getSeedStory2 = (): SeedStory => {
-    const patient: Patient = {
-        birthday: '01-01-1985',
-        country: 'Vaticano',
-        email: 'jane@doe.com',
-        gender: 'female',
-        id: '0987654321',
-        maritalStatus: 'married',
-        name: 'Jane Doe',
-        phone: '777666555',
-        address: '332/4 Super St, Tumaru',
-        bloodType: 'ORH negative',
-        job: 'Doctor',
-    };
+export const generateSeed = (appointmentsCount = 10): SeedStory => {
+    const patient = generatePatient();
+    const appointments = Array.from({ length: appointmentsCount }).map(() => generateAppointment());
 
     return {
-        $key: '2',
-        $path: 'fake/path',
-        patient,
+        $key: 'fake',
+        $path: 'fake',
         keywords: generateKeywords(patient),
-        appointments: [
-            {
-                $key: '3',
-                $path: 'fake/path',
-                date: '03-06-2020',
-                status: AppointmentStatusEnum.waiting,
-                time: '13:00',
-            },
-            {
-                $key: '4',
-                $path: 'fake/path',
-                date: '02-07-2020',
-                status: AppointmentStatusEnum.open,
-                time: '15:00',
-            },
-        ],
+        patient,
+        appointments,
     };
 };
