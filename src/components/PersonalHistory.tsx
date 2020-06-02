@@ -3,7 +3,7 @@ import { Form, Table } from 'antd';
 import { Store } from 'antd/lib/form/interface';
 
 import { PersonalHistoryOptions } from '../db/constants';
-import { AppointmentForm, AppointmentFormStep, AppointmentFormPersonalHistory } from '../types';
+import { AppointmentForm, AppointmentFormPersonalHistory } from '../types';
 import useRealtimeForm from '../hooks/useRealtimeForm';
 import SelectList from './SelectList';
 
@@ -46,7 +46,7 @@ const fakeData = [
 interface Props {
     data?: AppointmentFormPersonalHistory;
     disabled?: boolean;
-    onValuesChange?: (value: AppointmentForm, step: AppointmentFormStep) => void;
+    onValuesChange?: (value: AppointmentForm) => void;
 }
 
 const PersonalHistory: React.FC<Props> = ({ data, onValuesChange }) => {
@@ -57,8 +57,7 @@ const PersonalHistory: React.FC<Props> = ({ data, onValuesChange }) => {
     const transformedHandleOnValuesChange = useCallback(
         (values: Store) => {
             // We need to take the value out of the nested fields inside personalHistory
-            onValuesChange &&
-                onValuesChange({ personalHistory: values && values['personalHistory'] }, 'personalHistory');
+            onValuesChange && onValuesChange({ personalHistory: values && values['personalHistory'] });
         },
         [onValuesChange],
     );

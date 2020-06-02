@@ -10,7 +10,7 @@ import SelectList from './SelectList';
 interface Props {
     data?: AppointmentFormPhysicalExam;
     disabled?: boolean;
-    onValuesChange?: (value: AppointmentForm, step: keyof AppointmentForm) => void;
+    onValuesChange?: (value: AppointmentForm) => void;
 }
 
 const PhysicalExam: React.FC<Props> = ({ data, onValuesChange }) => {
@@ -21,7 +21,7 @@ const PhysicalExam: React.FC<Props> = ({ data, onValuesChange }) => {
     const transformedHandleOnValuesChange = useCallback(
         (values: Store) => {
             // We need to take the value out of the nested fields inside physicalExam
-            onValuesChange && onValuesChange({ physicalExam: values && values['physicalExam'] }, 'physicalExam');
+            onValuesChange && onValuesChange({ physicalExam: values && values['physicalExam'] });
         },
         [onValuesChange],
     );

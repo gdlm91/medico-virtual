@@ -66,8 +66,6 @@ export interface AppointmentForm {
     treatment?: AppointmentFormTreatment;
 }
 
-export type AppointmentFormStep = keyof AppointmentForm;
-
 export enum AppointmentStatusEnum {
     'pending' = 'pending',
     'waiting' = 'waiting',

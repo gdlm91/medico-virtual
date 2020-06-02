@@ -37,8 +37,8 @@ const Appointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) =>
         storyApi.updatePatientInfo(patientInfo);
     };
 
-    const handleOnAppointmentUpdate = (appointmentForm: AppointmentForm, step: keyof AppointmentForm) => {
-        appointmentFormApi.updateForm(appointmentForm, step);
+    const handleOnAppointmentUpdate = (appointmentForm: AppointmentForm) => {
+        appointmentFormApi.updateForm(appointmentForm);
     };
 
     const renderedComponentsInForm = [

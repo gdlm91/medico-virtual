@@ -9,14 +9,14 @@ import useRealtimeForm from '../hooks/useRealtimeForm';
 interface Props {
     data?: AppointmentFormVitalSigns;
     disabled?: boolean;
-    onValuesChange?: (value: AppointmentForm, step: keyof AppointmentForm) => void;
+    onValuesChange?: (value: AppointmentForm) => void;
 }
 
 const VitalSigns: React.FC<Props> = ({ data, onValuesChange }) => {
     const transformedHandleOnValuesChange = useCallback(
         (values: Store) => {
             // We need to take the value out of the nested fields inside vitalSigns
-            onValuesChange && onValuesChange({ vitalSigns: values }, 'vitalSigns');
+            onValuesChange && onValuesChange({ vitalSigns: values });
         },
         [onValuesChange],
     );

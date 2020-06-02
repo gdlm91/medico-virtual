@@ -2,19 +2,19 @@ import React, { useCallback } from 'react';
 import { Input, Form } from 'antd';
 import { Store } from 'antd/lib/form/interface';
 
-import { AppointmentForm, AppointmentFormReason, AppointmentFormStep } from '../types';
+import { AppointmentForm, AppointmentFormReason } from '../types';
 import useRealtimeForm from '../hooks/useRealtimeForm';
 
 interface Props {
     data?: AppointmentFormReason;
     disabled?: boolean;
-    onValuesChange?: (value: AppointmentForm, step: AppointmentFormStep) => void;
+    onValuesChange?: (value: AppointmentForm) => void;
 }
 
 const AppointmentReason: React.FC<Props> = ({ data, onValuesChange }) => {
     const wrappedCallback = useCallback(
         (values: Store) => {
-            onValuesChange && onValuesChange({ reason: values as AppointmentFormReason }, 'reason');
+            onValuesChange && onValuesChange({ reason: values as AppointmentFormReason });
         },
         [onValuesChange],
     );

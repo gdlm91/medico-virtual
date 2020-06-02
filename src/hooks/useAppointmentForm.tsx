@@ -6,7 +6,7 @@ import useResponse, { Response } from './utils/useResponse';
 import createApiFn from './utils/createApiFn';
 
 interface AppointmentAPI {
-    updateForm: (form: AppointmentForm, step: keyof AppointmentForm) => void;
+    updateForm: (form: AppointmentForm) => void;
 }
 
 interface UseAppointmentForm {
@@ -25,7 +25,7 @@ const useAppointment = (storyKey: string, appointmentKey: string): UseAppointmen
     }, [path]);
 
     const updateForm = createApiFn<AppointmentForm>(
-        async (form: AppointmentForm, step: keyof AppointmentForm) => {
+        async (form: AppointmentForm) => {
             if (!response.data) {
                 return;
             }
@@ -33,7 +33,7 @@ const useAppointment = (storyKey: string, appointmentKey: string): UseAppointmen
             // need to create an empty form before updating for the first time.
             await createIfUndefined(path);
 
-            return update<{ [key: string]: unknown }>(path, { [step]: form[step] });
+            return update<{ [key: string]: unknown }>(path, { ...form });
         },
         response,
         setResponse,

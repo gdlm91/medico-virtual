@@ -8,13 +8,13 @@ import useRealtimeForm from '../hooks/useRealtimeForm';
 interface Props {
     data?: AppointmentFormTreatment;
     disabled?: boolean;
-    onValuesChange?: (value: AppointmentForm, step: keyof AppointmentForm) => void;
+    onValuesChange?: (value: AppointmentForm) => void;
 }
 
 const Treatment: React.FC<Props> = ({ data, onValuesChange }) => {
     const transformedHandleOnValuesChange = useCallback(
         (values: Store) => {
-            onValuesChange && onValuesChange({ treatment: values }, 'treatment');
+            onValuesChange && onValuesChange({ treatment: values });
         },
         [onValuesChange],
     );

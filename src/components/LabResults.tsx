@@ -9,7 +9,7 @@ import useRealtimeForm from '../hooks/useRealtimeForm';
 interface Props {
     data?: AppointmentFormResults;
     disabled?: boolean;
-    onValuesChange?: (value: AppointmentForm, step: keyof AppointmentForm) => void;
+    onValuesChange?: (value: AppointmentForm) => void;
 }
 
 const storeToData = (store: Store): AppointmentFormResults => {
@@ -51,7 +51,7 @@ const LabResults: React.FC<Props> = ({ data, onValuesChange }) => {
     }, [data]);
     const transformedHandleOnValuesChange = useCallback(
         (values: Store) => {
-            onValuesChange && onValuesChange({ results: values && storeToData(values) }, 'results');
+            onValuesChange && onValuesChange({ results: values && storeToData(values) });
         },
         [onValuesChange],
     );
