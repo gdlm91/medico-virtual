@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Form } from 'antd';
+import { Store } from 'antd/lib/form/interface';
 
 import { PhysicalExamOptions } from '../db/constants';
-import SelectList from './SelectList';
 import { AppointmentFormPhysicalExam, AppointmentForm } from '../types';
-import { debounce } from 'debounce';
-import { Store } from 'antd/lib/form/interface';
+import useRealtimeForm from '../hooks/useRealtimeForm';
+import SelectList from './SelectList';
 
 interface Props {
     data?: AppointmentFormPhysicalExam;
@@ -14,33 +14,22 @@ interface Props {
 }
 
 const PhysicalExam: React.FC<Props> = ({ data, onValuesChange }) => {
-    const [formRef] = Form.useForm();
-
-    const handleOnValuesChange = useCallback(
-        debounce((changedValues: Store, { physicalExam }: Store) => {
-            if (!onValuesChange) {
-                return;
-            }
-
-            onValuesChange({ physicalExam: physicalExam as AppointmentFormPhysicalExam }, 'physicalExam');
-        }, 5000),
+    const transformedData = useMemo(() => {
+        // We need to put the information inside an object for SelectList to work properly
+        return data && ({ physicalExam: data } as AppointmentForm);
+    }, [data]);
+    const transformedHandleOnValuesChange = useCallback(
+        (values: Store) => {
+            // We need to take the value out of the nested fields inside physicalExam
+            onValuesChange && onValuesChange({ physicalExam: values && values['physicalExam'] }, 'physicalExam');
+        },
         [onValuesChange],
     );
-
-    useEffect(() => {
-        // trigger any debonced update before destroying
-        return () => handleOnValuesChange.flush();
-    }, [handleOnValuesChange]);
-
-    useEffect(() => {
-        if (data) {
-            formRef.setFieldsValue({ physicalExam: data });
-        }
-    }, [formRef, data]);
+    const { formRef, handleOnValuesChange } = useRealtimeForm(transformedData, transformedHandleOnValuesChange);
 
     return (
         <Form form={formRef} layout="vertical" onValuesChange={handleOnValuesChange}>
-            <SelectList name="physicalExam" label="Examen fisico" options={PhysicalExamOptions}></SelectList>,
+            <SelectList name="physicalExam" label="Examen fisico" options={PhysicalExamOptions}></SelectList>
         </Form>
     );
 };

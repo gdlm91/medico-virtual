@@ -1,49 +1,32 @@
-import React, { useEffect, useCallback } from 'react';
-import { debounce } from 'debounce';
+import React, { useCallback } from 'react';
 import { Input, Form } from 'antd';
 import { Store } from 'antd/lib/form/interface';
 
-import { AppointmentForm, AppointmentFormReason } from '../types';
+import { AppointmentForm, AppointmentFormReason, AppointmentFormStep } from '../types';
+import useRealtimeForm from '../hooks/useRealtimeForm';
 
 interface Props {
     data?: AppointmentFormReason;
     disabled?: boolean;
-    onValuesChange?: (value: AppointmentForm, step: keyof AppointmentForm) => void;
+    onValuesChange?: (value: AppointmentForm, step: AppointmentFormStep) => void;
 }
 
 const AppointmentReason: React.FC<Props> = ({ data, onValuesChange }) => {
-    const { TextArea } = Input;
-    const [formRef] = Form.useForm();
-
-    const handleOnValuesChange = useCallback(
-        debounce((changedValues: Store, allValues: Store) => {
-            if (!onValuesChange) {
-                return;
-            }
-
-            onValuesChange({ reason: allValues as AppointmentFormReason }, 'reason');
-        }, 5000),
+    const wrappedCallback = useCallback(
+        (values: Store) => {
+            onValuesChange && onValuesChange({ reason: values as AppointmentFormReason }, 'reason');
+        },
         [onValuesChange],
     );
-
-    useEffect(() => {
-        // trigger any debonced update before destroying
-        return () => handleOnValuesChange.flush();
-    }, [handleOnValuesChange]);
-
-    useEffect(() => {
-        if (data) {
-            formRef.setFieldsValue(data);
-        }
-    }, [formRef, data]);
+    const { formRef, handleOnValuesChange } = useRealtimeForm(data, wrappedCallback);
 
     return (
         <Form form={formRef} layout="vertical" onValuesChange={handleOnValuesChange}>
             <Form.Item label="Motivo de consulta" name="reason">
-                <TextArea autoSize={{ minRows: 5, maxRows: 5 }} />
+                <Input.TextArea autoSize={{ minRows: 5, maxRows: 5 }} />
             </Form.Item>
             <Form.Item label="Enfermedad actual" name="sickness">
-                <TextArea autoSize={{ minRows: 5, maxRows: 5 }} />
+                <Input.TextArea autoSize={{ minRows: 5, maxRows: 5 }} />
             </Form.Item>
         </Form>
     );

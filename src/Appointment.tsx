@@ -25,7 +25,7 @@ interface Props extends RouteComponentProps {
     appointmentKey?: string;
 }
 
-const FillAppointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) => {
+const Appointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) => {
     const { response: storyResponse, api: storyApi } = useStory(storyKey);
     const { response: appointmentResponse } = useAppointment(storyKey, appointmentKey);
     const { response: appointmentFormResponse, api: appointmentFormApi } = useAppointmentForm(storyKey, appointmentKey);
@@ -171,4 +171,4 @@ const FillAppointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }
     );
 };
 
-export default FillAppointment;
+export default Appointment;

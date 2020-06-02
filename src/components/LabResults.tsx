@@ -1,10 +1,10 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Checkbox, DatePicker, Form, Row, Col, Input } from 'antd';
 import { Store } from 'antd/lib/form/interface';
-import { debounce } from 'debounce';
 import moment, { Moment } from 'moment';
 
 import { AppointmentForm, AppointmentFormResults } from '../types';
+import useRealtimeForm from '../hooks/useRealtimeForm';
 
 interface Props {
     data?: AppointmentFormResults;
@@ -46,20 +46,18 @@ const dataToStore = (data: AppointmentFormResults): Store => {
 };
 
 const LabResults: React.FC<Props> = ({ data, onValuesChange }) => {
-    const [formRef] = Form.useForm();
-    const [labDisabled, setLabDisabled] = useState(!Boolean(data?.lab));
-    const [imagesDisabled, setImagesDisabled] = useState(!Boolean(data?.images));
-
-    const handleOnValuesChange = useCallback(
-        debounce((changedValues: Store, allValues: Store) => {
-            if (!onValuesChange) {
-                return;
-            }
-
-            onValuesChange({ results: storeToData(allValues) }, 'results');
-        }, 5000),
+    const transformedData = useMemo(() => {
+        return data && dataToStore(data);
+    }, [data]);
+    const transformedHandleOnValuesChange = useCallback(
+        (values: Store) => {
+            onValuesChange && onValuesChange({ results: values && storeToData(values) }, 'results');
+        },
         [onValuesChange],
     );
+    const { formRef, handleOnValuesChange } = useRealtimeForm(transformedData, transformedHandleOnValuesChange);
+    const [labDisabled, setLabDisabled] = useState(!Boolean(data?.lab));
+    const [imagesDisabled, setImagesDisabled] = useState(!Boolean(data?.images));
 
     const toggleLabDisabled = () => {
         const disabled = !labDisabled;
@@ -100,17 +98,6 @@ const LabResults: React.FC<Props> = ({ data, onValuesChange }) => {
 
         setImagesDisabled(disabled);
     };
-
-    useEffect(() => {
-        // trigger any debonced update before destroying
-        return () => handleOnValuesChange.flush();
-    }, [handleOnValuesChange]);
-
-    useEffect(() => {
-        if (data) {
-            formRef.setFieldsValue(dataToStore(data));
-        }
-    }, [formRef, data]);
 
     return (
         <Form form={formRef} layout="vertical" onValuesChange={handleOnValuesChange}>

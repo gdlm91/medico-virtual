@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Form, Table } from 'antd';
-import SelectList from './SelectList';
-import { debounce } from 'debounce';
 import { Store } from 'antd/lib/form/interface';
 
 import { PersonalHistoryOptions } from '../db/constants';
-import { AppointmentForm, AppointmentFormPersonalHistory } from '../types';
+import { AppointmentForm, AppointmentFormStep, AppointmentFormPersonalHistory } from '../types';
+import useRealtimeForm from '../hooks/useRealtimeForm';
+import SelectList from './SelectList';
 
 const columns = [
     {
@@ -46,33 +46,23 @@ const fakeData = [
 interface Props {
     data?: AppointmentFormPersonalHistory;
     disabled?: boolean;
-    onValuesChange?: (value: AppointmentForm, step: keyof AppointmentForm) => void;
+    onValuesChange?: (value: AppointmentForm, step: AppointmentFormStep) => void;
 }
 
 const PersonalHistory: React.FC<Props> = ({ data, onValuesChange }) => {
-    const [formRef] = Form.useForm();
-
-    const handleOnValuesChange = useCallback(
-        debounce((changedValues: Store, { personalHistory }: Store) => {
-            if (!onValuesChange) {
-                return;
-            }
-
-            onValuesChange({ personalHistory: personalHistory as AppointmentFormPersonalHistory }, 'personalHistory');
-        }, 5000),
+    const transformedData = useMemo(() => {
+        // We need to put the information inside an object for SelectList to work properly
+        return data && ({ personalHistory: data } as AppointmentForm);
+    }, [data]);
+    const transformedHandleOnValuesChange = useCallback(
+        (values: Store) => {
+            // We need to take the value out of the nested fields inside personalHistory
+            onValuesChange &&
+                onValuesChange({ personalHistory: values && values['personalHistory'] }, 'personalHistory');
+        },
         [onValuesChange],
     );
-
-    useEffect(() => {
-        // trigger any debonced update before destroying
-        return () => handleOnValuesChange.flush();
-    }, [handleOnValuesChange]);
-
-    useEffect(() => {
-        if (data) {
-            formRef.setFieldsValue({ personalHistory: data });
-        }
-    }, [formRef, data]);
+    const { formRef, handleOnValuesChange } = useRealtimeForm(transformedData, transformedHandleOnValuesChange);
 
     return (
         <>

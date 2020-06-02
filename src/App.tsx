@@ -7,7 +7,7 @@ import './App.css';
 import History from './History';
 import Agenda from './Agenda';
 import DoctorProfile from './DoctorProfile';
-import FillAppointment from './FillAppointment';
+import Appointment from './Appointment';
 import Api from './Api';
 import HistoryDetails from './HistoryDetails';
 
@@ -73,13 +73,13 @@ function App() {
                 </Location>
             </Header>
             <Content style={{ padding: '60px 50px 0' }}>
-                <div className="site-layout-content">
+                <div className="site-layout-content" style={{ maxWidth: '1400px', margin: '0 auto' }}>
                     <Router>
                         <Agenda path="/" />
                         <History path="/stories">
                             <HistoryDetails path=":storyKey" />
                         </History>
-                        <FillAppointment path="/stories/:storyKey/appointments/:appointmentKey" />
+                        <Appointment path="/stories/:storyKey/appointments/:appointmentKey" />
                         <DoctorProfile path="/profile" />
                         <Api path="/api" />
                     </Router>

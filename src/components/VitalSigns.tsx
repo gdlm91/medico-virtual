@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { Table, Input, Form } from 'antd';
 import { Store } from 'antd/lib/form/interface';
-import { debounce } from 'debounce';
 
 import { VitalSignOptions } from '../db/constants';
 import { AppointmentFormVitalSigns, AppointmentForm } from '../types';
+import useRealtimeForm from '../hooks/useRealtimeForm';
 
 interface Props {
     data?: AppointmentFormVitalSigns;
@@ -13,7 +13,14 @@ interface Props {
 }
 
 const VitalSigns: React.FC<Props> = ({ data, onValuesChange }) => {
-    const [formRef] = Form.useForm();
+    const transformedHandleOnValuesChange = useCallback(
+        (values: Store) => {
+            // We need to take the value out of the nested fields inside vitalSigns
+            onValuesChange && onValuesChange({ vitalSigns: values }, 'vitalSigns');
+        },
+        [onValuesChange],
+    );
+    const { formRef, handleOnValuesChange } = useRealtimeForm(data, transformedHandleOnValuesChange);
 
     const columns = [
         {
@@ -38,37 +45,9 @@ const VitalSigns: React.FC<Props> = ({ data, onValuesChange }) => {
         },
     ];
 
-    const handleOnValuesChange = useCallback(
-        debounce((changedValues: Store, allValues: Store) => {
-            if (!onValuesChange) {
-                return;
-            }
-
-            onValuesChange({ vitalSigns: allValues as AppointmentFormVitalSigns }, 'vitalSigns');
-        }, 5000),
-        [onValuesChange],
-    );
-
-    useEffect(() => {
-        // trigger any debonced update before destroying
-        return () => handleOnValuesChange.flush();
-    }, [handleOnValuesChange]);
-
-    useEffect(() => {
-        if (data) {
-            formRef.setFieldsValue(data);
-        }
-    }, [formRef, data]);
-
     return (
         <Form name="form" form={formRef} onValuesChange={handleOnValuesChange}>
-            <Table
-                pagination={false}
-                bordered
-                dataSource={VitalSignOptions}
-                columns={columns}
-                style={{ maxWidth: '800px' }}
-            />
+            <Table pagination={false} bordered dataSource={VitalSignOptions} columns={columns} />
         </Form>
     );
 };

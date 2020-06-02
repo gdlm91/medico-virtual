@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { Input, Form } from 'antd';
+import { Store } from 'antd/lib/form/interface';
 
 import { AppointmentFormTreatment, AppointmentForm } from '../types';
-import { debounce } from 'debounce';
-import { Store } from 'antd/lib/form/interface';
+import useRealtimeForm from '../hooks/useRealtimeForm';
 
 interface Props {
     data?: AppointmentFormTreatment;
@@ -12,38 +12,21 @@ interface Props {
 }
 
 const Treatment: React.FC<Props> = ({ data, onValuesChange }) => {
-    const { TextArea } = Input;
-    const [formRef] = Form.useForm();
-
-    const handleOnValuesChange = useCallback(
-        debounce((changedValues: Store, allValues: Store) => {
-            if (!onValuesChange) {
-                return;
-            }
-
-            onValuesChange({ treatment: allValues as AppointmentFormTreatment }, 'treatment');
-        }, 5000),
+    const transformedHandleOnValuesChange = useCallback(
+        (values: Store) => {
+            onValuesChange && onValuesChange({ treatment: values }, 'treatment');
+        },
         [onValuesChange],
     );
-
-    useEffect(() => {
-        // trigger any debonced update before destroying
-        return () => handleOnValuesChange.flush();
-    }, [handleOnValuesChange]);
-
-    useEffect(() => {
-        if (data) {
-            formRef.setFieldsValue(data);
-        }
-    }, [formRef, data]);
+    const { formRef, handleOnValuesChange } = useRealtimeForm(data, transformedHandleOnValuesChange);
 
     return (
         <Form form={formRef} layout="vertical" onValuesChange={handleOnValuesChange}>
             <Form.Item label="Tratamiento" name="treatment">
-                <TextArea autoSize={{ minRows: 5 }} />
+                <Input.TextArea autoSize={{ minRows: 5 }} />
             </Form.Item>
             <Form.Item label="Observaciones a Familiares" name="observations">
-                <TextArea autoSize={{ minRows: 5 }} />
+                <Input.TextArea autoSize={{ minRows: 5 }} />
             </Form.Item>
         </Form>
     );

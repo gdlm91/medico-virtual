@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Form, Table } from 'antd';
-
-import SelectList from './SelectList';
-import { FamilyHistoryOptions } from '../db/constants';
-import { AppointmentForm, AppointmentFormFamilyHistory } from '../types';
-import { debounce } from 'debounce';
 import { Store } from 'antd/lib/form/interface';
+
+import { FamilyHistoryOptions } from '../db/constants';
+import { AppointmentForm, AppointmentFormStep, AppointmentFormFamilyHistory } from '../types';
+import useRealtimeForm from '../hooks/useRealtimeForm';
+import SelectList from './SelectList';
 
 const columns = [
     {
@@ -45,33 +45,22 @@ const fakeData = [
 interface Props {
     data?: AppointmentFormFamilyHistory;
     disabled?: boolean;
-    onValuesChange?: (value: AppointmentForm, step: keyof AppointmentForm) => void;
+    onValuesChange?: (value: AppointmentForm, step: AppointmentFormStep) => void;
 }
 
 const FamilyHistory: React.FC<Props> = ({ data, onValuesChange }) => {
-    const [formRef] = Form.useForm();
-
-    const handleOnValuesChange = useCallback(
-        debounce((changedValues: Store, { familyHistory }: Store) => {
-            if (!onValuesChange) {
-                return;
-            }
-
-            onValuesChange({ familyHistory: familyHistory as AppointmentFormFamilyHistory }, 'familyHistory');
-        }, 5000),
+    const transformedData = useMemo(() => {
+        // We need to put the information inside an object for SelectList to work properly
+        return data && ({ familyHistory: data } as AppointmentForm);
+    }, [data]);
+    const transformedHandleOnValuesChange = useCallback(
+        (values: Store) => {
+            // We need to take the value out of the nested fields inside familyHistory
+            onValuesChange && onValuesChange({ familyHistory: values && values['familyHistory'] }, 'familyHistory');
+        },
         [onValuesChange],
     );
-
-    useEffect(() => {
-        // trigger any debonced update before destroying
-        return () => handleOnValuesChange.flush();
-    }, [handleOnValuesChange]);
-
-    useEffect(() => {
-        if (data) {
-            formRef.setFieldsValue({ familyHistory: data });
-        }
-    }, [formRef, data]);
+    const { formRef, handleOnValuesChange } = useRealtimeForm(transformedData, transformedHandleOnValuesChange);
 
     return (
         <>
