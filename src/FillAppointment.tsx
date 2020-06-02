@@ -118,7 +118,9 @@ const FillAppointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }
         },
         {
             title: 'Tratamiento',
-            component: <Treatment />,
+            component: (
+                <Treatment data={appointmentFormResponse.data?.treatment} onValuesChange={handleOnAppointmentUpdate} />
+            ),
         },
         {
             title: 'Descargables',

@@ -50,6 +50,11 @@ export type AppointmentFormVitalSigns = {
     [key: string]: string;
 };
 
+export interface AppointmentFormTreatment {
+    treatment?: string;
+    observations?: string;
+}
+
 export interface AppointmentForm {
     reason?: AppointmentFormReason;
     results?: AppointmentFormResults;
@@ -58,6 +63,7 @@ export interface AppointmentForm {
     familyHistory?: AppointmentFormFamilyHistory;
     vitalSigns?: AppointmentFormVitalSigns;
     physicalExam?: AppointmentFormPhysicalExam;
+    treatment?: AppointmentFormTreatment;
 }
 
 export enum AppointmentStatusEnum {
