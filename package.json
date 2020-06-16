@@ -4,6 +4,7 @@
     "private": true,
     "scripts": {
         "start": "react-scripts start",
+        "start:firebase": "cd functions && yarn serve",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
@@ -28,6 +29,7 @@
         "debounce": "^1.2.0",
         "firebase": "^7.14.2",
         "moment": "2.24.0",
+        "npm-run-all": "^4.1.5",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
         "react-scripts": "3.4.1",

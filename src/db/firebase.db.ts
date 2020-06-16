@@ -1,12 +1,8 @@
-import * as firebase from 'firebase/app';
-import 'firebase/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { collection, doc } from 'rxfire/firestore';
 
-import config from './firestore.config';
-
-const app = firebase.initializeApp(config);
+import app from './firebase.app';
 
 const db = app.firestore();
 

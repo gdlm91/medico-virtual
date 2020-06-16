@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDebounce } from 'use-debounce';
 
-import { list, add } from '../db/firestore.db';
+import { list, add } from '../db/firebase.db';
 import generateKeywords from '../db/utils/tokenizePatientData';
 import { Entities, Story, Patient } from '../types';
 import useResponse, { Response } from './utils/useResponse';

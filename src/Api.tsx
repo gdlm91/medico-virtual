@@ -11,6 +11,7 @@ import useStoryList from './hooks/useStoryList';
 import useStory from './hooks/useStory';
 import useAllAppointmentList from './hooks/useAllAppointmentList';
 import useAppointment, { getAppointmentKeysFromPath } from './hooks/useAppointment';
+import useCie10 from './hooks/useCie10';
 
 const StoryListApi = () => {
     const [query, setQuery] = useState('');
@@ -187,6 +188,34 @@ const AppointmentApi = ({ $path }: { $path: string }) => {
     );
 };
 
+const Cie10Api = () => {
+    const [query, setQuery] = useState('');
+    const [response] = useCie10(query);
+
+    const { Option } = AutoComplete;
+
+    const handleOnChange = (q: string) => {
+        setQuery(q);
+    };
+
+    return (
+        <>
+            <h3>Búsqueda de diagnóstico</h3>
+            <Form.Item label="Buscar por código o término">
+                <AutoComplete value={query} onChange={handleOnChange}>
+                    {response.data &&
+                        response.data.map((res) => (
+                            <Option key={res.id} value={res.code}>
+                                {res.code}
+                            </Option>
+                        ))}
+                </AutoComplete>
+                {response.error && <Error description={response.error.message} />}
+            </Form.Item>
+        </>
+    );
+};
+
 const Api: React.FC<RouteComponentProps> = () => {
     const [storyKey, setStoryKey] = useState<string>();
     const [appointmentPath, setAppointmentPath] = useState<string>();
@@ -200,6 +229,9 @@ const Api: React.FC<RouteComponentProps> = () => {
             <h1>Consultas</h1>
             <AllAppointmentListApi />
             {appointmentPath && <AppointmentApi $path={appointmentPath} />}
+
+            <h1>CIE 10</h1>
+            <Cie10Api />
         </ApiContext.Provider>
     );
 };

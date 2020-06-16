@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { list } from '../db/firestore.db';
+import { list } from '../db/firebase.db';
 import { Entities, Appointment } from '../types';
 import useResponse, { Response } from './utils/useResponse';
 
