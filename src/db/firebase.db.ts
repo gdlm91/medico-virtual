@@ -6,6 +6,13 @@ import app from './firebase.app';
 
 const db = app.firestore();
 
+if (process.env.REACT_APP_LOCAL) {
+    db.settings({
+        host: 'localhost:8080',
+        ssl: false,
+    });
+}
+
 export type FirestoreQuery = [string | firebase.firestore.FieldPath, firebase.firestore.WhereFilterOp, unknown];
 
 export interface QueryOptions {

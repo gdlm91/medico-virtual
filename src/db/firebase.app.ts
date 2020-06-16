@@ -3,11 +3,11 @@ import 'firebase/firestore';
 import 'firebase/functions';
 
 const config = {
-    apiKey: 'AIzaSyCkoZ62oBDvzCMKo5zxSp34SZsheoG-yVU',
-    appId: '1:637061636597:web:18a09d5f19eaf7b7d0c0bc',
-    authDomain: 'medico-virtual-latam.firebaseapp.com',
-    databaseURL: 'https://medico-virtual-latam.firebaseio.com',
-    projectId: 'medico-virtual-latam',
+    apiKey: process.env.REACT_APP_APIKEY,
+    appId: process.env.REACT_APP_APPID,
+    authDomain: process.env.REACT_APP_AUTHDOMAIN,
+    databaseURL: process.env.REACT_APP_DATABASEURL,
+    projectId: process.env.REACT_APP_PROJECTID,
 };
 
 const app = firebase.initializeApp(config);
