@@ -8,6 +8,11 @@ export interface SelectListRecord {
     observation: string;
 }
 
+export interface Cie10Record {
+    id: number;
+    code: string;
+}
+
 export interface Patient {
     name: string;
     country: string;
@@ -55,6 +60,12 @@ export interface AppointmentFormTreatment {
     observations?: string;
 }
 
+export interface AppointmentDiagnosis {
+    principal: string;
+    diagnosis2: string;
+    diagnosis3: string;
+}
+
 export interface AppointmentForm {
     reason?: AppointmentFormReason;
     results?: AppointmentFormResults;
@@ -64,6 +75,7 @@ export interface AppointmentForm {
     vitalSigns?: AppointmentFormVitalSigns;
     physicalExam?: AppointmentFormPhysicalExam;
     treatment?: AppointmentFormTreatment;
+    diagnosis?: AppointmentDiagnosis;
 }
 
 export enum AppointmentStatusEnum {

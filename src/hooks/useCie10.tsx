@@ -3,13 +3,9 @@ import { fromFetch } from 'rxjs/fetch';
 import { switchMap } from 'rxjs/operators';
 
 import useResponse from './utils/useResponse';
+import { Cie10Record } from '../types';
 
 const ENDPOINT = `${process.env.REACT_APP_FIREBASE_HTTPS}/cie`;
-
-interface Cie10Record {
-    id: number;
-    code: string;
-}
 
 const useCie10 = (term: string) => {
     const [response, setResponse] = useResponse<Cie10Record[]>();

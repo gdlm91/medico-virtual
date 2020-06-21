@@ -114,7 +114,9 @@ const Appointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) =>
         },
         {
             title: 'Diagnóstico',
-            component: <Diagnosis />,
+            component: (
+                <Diagnosis data={appointmentFormResponse.data?.diagnosis} onValuesChange={handleOnAppointmentUpdate} />
+            ),
         },
         {
             title: 'Tratamiento',
