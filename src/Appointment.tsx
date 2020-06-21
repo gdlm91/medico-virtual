@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { Tabs, Row, Col, Button, Skeleton } from 'antd';
 
-import { Patient, AppointmentForm } from './types';
+import { Patient, AppointmentForm, AppointmentStatusEnum } from './types';
 import useTabsPosition from './hooks/useTabPosition';
 import useStory from './hooks/useStory';
 import useAppointment from './hooks/useAppointment';
@@ -27,11 +27,12 @@ interface Props extends RouteComponentProps {
 
 const Appointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) => {
     const { response: storyResponse, api: storyApi } = useStory(storyKey);
-    const { response: appointmentResponse } = useAppointment(storyKey, appointmentKey);
+    const { response: appointmentResponse, api: appointmentApi } = useAppointment(storyKey, appointmentKey);
     const { response: appointmentFormResponse, api: appointmentFormApi } = useAppointmentForm(storyKey, appointmentKey);
     const [activeTab, setActiveTab] = useState(0);
     const tabPosition = useTabsPosition();
     const loadingData = !storyResponse.data && !appointmentResponse.data && !appointmentFormResponse.data;
+    const readOnly = appointmentResponse.data?.status !== AppointmentStatusEnum.open;
 
     const handlePatientUpdate = (patientInfo: Patient) => {
         storyApi.updatePatientInfo(patientInfo);
@@ -47,7 +48,11 @@ const Appointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) =>
             component: (
                 <Skeleton loading={loadingData} active={true}>
                     {storyResponse.data && (
-                        <PatientDetails data={storyResponse.data.patient} onValuesChange={handlePatientUpdate} />
+                        <PatientDetails
+                            disabled={readOnly}
+                            data={storyResponse.data.patient}
+                            onValuesChange={handlePatientUpdate}
+                        />
                     )}
                 </Skeleton>
             ),
@@ -56,6 +61,7 @@ const Appointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) =>
             title: 'Motivo de consulta',
             component: (
                 <AppointmentReason
+                    disabled={readOnly}
                     data={appointmentFormResponse.data?.reason}
                     onValuesChange={handleOnAppointmentUpdate}
                 />
@@ -64,13 +70,18 @@ const Appointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) =>
         {
             title: 'Resultado de laboratorio y RX',
             component: (
-                <LabResults data={appointmentFormResponse.data?.results} onValuesChange={handleOnAppointmentUpdate} />
+                <LabResults
+                    disabled={readOnly}
+                    data={appointmentFormResponse.data?.results}
+                    onValuesChange={handleOnAppointmentUpdate}
+                />
             ),
         },
         {
             title: 'Revisión por sistema',
             component: (
                 <SystemReview
+                    disabled={readOnly}
                     data={appointmentFormResponse.data?.systemReview}
                     onValuesChange={handleOnAppointmentUpdate}
                 />
@@ -80,6 +91,7 @@ const Appointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) =>
             title: 'Antecedentes personales',
             component: (
                 <PersonalHistory
+                    disabled={readOnly}
                     data={appointmentFormResponse.data?.personalHistory}
                     onValuesChange={handleOnAppointmentUpdate}
                 />
@@ -89,6 +101,7 @@ const Appointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) =>
             title: 'Antecedentes familiares',
             component: (
                 <FamilyHistory
+                    disabled={readOnly}
                     data={appointmentFormResponse.data?.familyHistory}
                     onValuesChange={handleOnAppointmentUpdate}
                 />
@@ -98,6 +111,7 @@ const Appointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) =>
             title: 'Signos vitales',
             component: (
                 <VitalSigns
+                    disabled={readOnly}
                     data={appointmentFormResponse.data?.vitalSigns}
                     onValuesChange={handleOnAppointmentUpdate}
                 />
@@ -107,6 +121,7 @@ const Appointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) =>
             title: 'Exámen fisico',
             component: (
                 <PhysicalExam
+                    disabled={readOnly}
                     data={appointmentFormResponse.data?.physicalExam}
                     onValuesChange={handleOnAppointmentUpdate}
                 />
@@ -115,13 +130,21 @@ const Appointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) =>
         {
             title: 'Diagnóstico',
             component: (
-                <Diagnosis data={appointmentFormResponse.data?.diagnosis} onValuesChange={handleOnAppointmentUpdate} />
+                <Diagnosis
+                    disabled={readOnly}
+                    data={appointmentFormResponse.data?.diagnosis}
+                    onValuesChange={handleOnAppointmentUpdate}
+                />
             ),
         },
         {
             title: 'Tratamiento',
             component: (
-                <Treatment data={appointmentFormResponse.data?.treatment} onValuesChange={handleOnAppointmentUpdate} />
+                <Treatment
+                    disabled={readOnly}
+                    data={appointmentFormResponse.data?.treatment}
+                    onValuesChange={handleOnAppointmentUpdate}
+                />
             ),
         },
         {
@@ -141,13 +164,40 @@ const Appointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) =>
         setActiveTab(nextTab);
     };
 
+    const handleCloseAppointment = () => {
+        if (appointmentResponse.data?.status !== AppointmentStatusEnum.closed) {
+            appointmentApi.changeStatus(AppointmentStatusEnum.closed);
+        }
+    };
+
+    useEffect(() => {
+        if (appointmentResponse.data?.status === AppointmentStatusEnum.waiting) {
+            appointmentApi.changeStatus(AppointmentStatusEnum.open);
+        }
+    }, [appointmentResponse]);
+
     return (
         <>
-            <h1>
-                <Skeleton loading={loadingData} paragraph={false} active={true}>
-                    Consulta médica
-                </Skeleton>
-            </h1>
+            <Row justify="space-between" align="middle">
+                <Col>
+                    <h1>
+                        <Skeleton loading={loadingData} paragraph={false} active={true}>
+                            Consulta médica
+                        </Skeleton>
+                    </h1>
+                </Col>
+                <Col>
+                    {loadingData ? (
+                        <Skeleton.Button active />
+                    ) : (
+                        !readOnly && (
+                            <Button type="primary" onClick={handleCloseAppointment}>
+                                Cerrar consulta
+                            </Button>
+                        )
+                    )}
+                </Col>
+            </Row>
 
             <Tabs tabPosition={tabPosition} activeKey={String(activeTab)} onTabClick={handleTabClick}>
                 {renderedComponentsInForm.map(({ title, component }, index) => (

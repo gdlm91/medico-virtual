@@ -13,7 +13,7 @@ interface Props {
     onValuesChange?: (value: AppointmentForm) => void;
 }
 
-const PhysicalExam: React.FC<Props> = ({ data, onValuesChange }) => {
+const PhysicalExam: React.FC<Props> = ({ data, onValuesChange, disabled }) => {
     const transformedData = useMemo(() => {
         // We need to put the information inside an object for SelectList to work properly
         return data && ({ physicalExam: data } as AppointmentForm);
@@ -29,7 +29,12 @@ const PhysicalExam: React.FC<Props> = ({ data, onValuesChange }) => {
 
     return (
         <Form form={formRef} layout="vertical" onValuesChange={handleOnValuesChange}>
-            <SelectList name="physicalExam" label="Examen fisico" options={PhysicalExamOptions}></SelectList>
+            <SelectList
+                name="physicalExam"
+                label="Examen fisico"
+                options={PhysicalExamOptions}
+                disabled={disabled}
+            ></SelectList>
         </Form>
     );
 };

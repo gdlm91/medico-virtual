@@ -11,7 +11,7 @@ interface Props {
     onValuesChange?: (value: AppointmentForm) => void;
 }
 
-const Treatment: React.FC<Props> = ({ data, onValuesChange }) => {
+const Treatment: React.FC<Props> = ({ data, onValuesChange, disabled }) => {
     const transformedHandleOnValuesChange = useCallback(
         (values: Store) => {
             onValuesChange && onValuesChange({ treatment: values });
@@ -22,12 +22,14 @@ const Treatment: React.FC<Props> = ({ data, onValuesChange }) => {
 
     return (
         <Form form={formRef} layout="vertical" onValuesChange={handleOnValuesChange}>
-            <Form.Item label="Tratamiento" name="treatment">
-                <Input.TextArea autoSize={{ minRows: 5 }} />
-            </Form.Item>
-            <Form.Item label="Observaciones a Familiares" name="observations">
-                <Input.TextArea autoSize={{ minRows: 5 }} />
-            </Form.Item>
+            <fieldset disabled={disabled}>
+                <Form.Item label="Tratamiento" name="treatment">
+                    <Input.TextArea autoSize={{ minRows: 5 }} />
+                </Form.Item>
+                <Form.Item label="Observaciones a Familiares" name="observations">
+                    <Input.TextArea autoSize={{ minRows: 5 }} />
+                </Form.Item>
+            </fieldset>
         </Form>
     );
 };

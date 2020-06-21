@@ -12,7 +12,7 @@ interface Props {
     onValuesChange?: (value: AppointmentForm) => void;
 }
 
-const VitalSigns: React.FC<Props> = ({ data, onValuesChange }) => {
+const VitalSigns: React.FC<Props> = ({ data, onValuesChange, disabled }) => {
     const transformedHandleOnValuesChange = useCallback(
         (values: Store) => {
             // We need to take the value out of the nested fields inside vitalSigns
@@ -34,7 +34,7 @@ const VitalSigns: React.FC<Props> = ({ data, onValuesChange }) => {
             render: (value: string, record: typeof VitalSignOptions[number]) => {
                 return (
                     <Form.Item name={record.key}>
-                        <Input />
+                        <Input disabled={disabled} />
                     </Form.Item>
                 );
             },
