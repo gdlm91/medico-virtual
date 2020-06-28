@@ -9,6 +9,7 @@ interface AppointmentAPI {
     changeStatus: (status: AppointmentStatusEnum) => Promise<void>;
     rescheduled: (date: string, time: string) => Promise<void>;
     closeAppointment: (diagnosis: string) => Promise<void>;
+    updateNote: (note: string) => Promise<void>;
 }
 
 interface UseAppointment {
@@ -68,7 +69,19 @@ const useAppointment = (storyKey: string, appointmentKey: string): UseAppointmen
         setResponse,
     );
 
-    return { response, api: { changeStatus, rescheduled, closeAppointment } };
+    const updateNote = createApiFn<Appointment>(
+        async (note: string) => {
+            if (!response.data) {
+                return;
+            }
+
+            return update<Appointment>(path, { ...response.data, note });
+        },
+        response,
+        setResponse,
+    );
+
+    return { response, api: { changeStatus, rescheduled, closeAppointment, updateNote } };
 };
 
 export default useAppointment;

@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { RouteComponentProps } from '@reach/router';
-import { Tabs, Row, Col, Button, Skeleton } from 'antd';
+import { Tabs, Row, Col, Button, Skeleton, Form, Input } from 'antd';
+import { Store } from 'antd/lib/form/interface';
 
 import { Patient, AppointmentForm, AppointmentStatusEnum } from './types';
 import useTabsPosition from './hooks/useTabPosition';
 import useStory from './hooks/useStory';
 import useAppointment from './hooks/useAppointment';
 import useAppointmentForm from './hooks/useAppointmentForm';
+import useRealtimeForm from './hooks/useRealtimeForm';
 
 import PatientDetails from './components/PatientDetails';
 import AppointmentReason from './components/AppointmentReason';
@@ -29,6 +31,19 @@ const Appointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) =>
     const { response: storyResponse, api: storyApi } = useStory(storyKey);
     const { response: appointmentResponse, api: appointmentApi } = useAppointment(storyKey, appointmentKey);
     const { response: appointmentFormResponse, api: appointmentFormApi } = useAppointmentForm(storyKey, appointmentKey);
+    const handleUpdateNote = useCallback(
+        (noteForm: Store) => {
+            if (appointmentResponse.data?.status === AppointmentStatusEnum.closed) {
+                const note: string = noteForm['note'];
+                appointmentApi.updateNote(note);
+            }
+        },
+        [appointmentResponse],
+    );
+    const { formRef: noteFormRef, handleOnValuesChange: handleNoteValuesChange } = useRealtimeForm(
+        appointmentResponse.data?.note,
+        handleUpdateNote,
+    );
     const [activeTab, setActiveTab] = useState(0);
     const tabPosition = useTabsPosition();
     const loadingData = !storyResponse.data && !appointmentResponse.data && !appointmentFormResponse.data;
@@ -40,6 +55,13 @@ const Appointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) =>
 
     const handleOnAppointmentUpdate = (appointmentForm: AppointmentForm) => {
         appointmentFormApi.updateForm(appointmentForm);
+    };
+
+    const handleCloseAppointment = () => {
+        if (appointmentResponse.data?.status !== AppointmentStatusEnum.closed) {
+            const diagnosis = appointmentFormResponse.data?.diagnosis?.principal.diagnosis || '';
+            appointmentApi.closeAppointment(diagnosis);
+        }
     };
 
     const renderedComponentsInForm = [
@@ -164,16 +186,15 @@ const Appointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) =>
         setActiveTab(nextTab);
     };
 
-    const handleCloseAppointment = () => {
-        if (appointmentResponse.data?.status !== AppointmentStatusEnum.closed) {
-            const diagnosis = appointmentFormResponse.data?.diagnosis?.principal.diagnosis || '';
-            appointmentApi.closeAppointment(diagnosis);
-        }
-    };
-
     useEffect(() => {
         if (appointmentResponse.data?.status === AppointmentStatusEnum.waiting) {
             appointmentApi.changeStatus(AppointmentStatusEnum.open);
+        }
+
+        if (appointmentResponse.data?.status === AppointmentStatusEnum.closed) {
+            noteFormRef.setFieldsValue({
+                note: appointmentResponse.data.note,
+            });
         }
     }, [appointmentResponse]);
 
@@ -200,6 +221,18 @@ const Appointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) =>
                 </Col>
             </Row>
 
+            {!loadingData && readOnly && (
+                <Row>
+                    <Col flex="auto">
+                        <Form form={noteFormRef} layout="vertical" onValuesChange={handleNoteValuesChange}>
+                            <Form.Item label="Nota aclaratoria" name="note">
+                                <Input.TextArea autoSize={{ minRows: 5, maxRows: 5 }} />
+                            </Form.Item>
+                        </Form>
+                    </Col>
+                </Row>
+            )}
+
             <Tabs tabPosition={tabPosition} activeKey={String(activeTab)} onTabClick={handleTabClick}>
                 {renderedComponentsInForm.map(({ title, component }, index) => (
                     <Tabs.TabPane tab={title} key={String(index)} disabled={loadingData}>
@@ -207,6 +240,7 @@ const Appointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) =>
                     </Tabs.TabPane>
                 ))}
             </Tabs>
+
             <Row justify="end">
                 <Col>
                     {loadingData ? (

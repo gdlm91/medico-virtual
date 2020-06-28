@@ -101,6 +101,7 @@ export interface Appointment {
     date: string;
     time: string;
     diagnosis?: string;
+    note?: string;
     status: AppointmentStatusEnum;
     timestamp: number;
     form?: AppointmentForm;
