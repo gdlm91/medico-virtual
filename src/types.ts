@@ -61,9 +61,18 @@ export interface AppointmentFormTreatment {
 }
 
 export interface AppointmentDiagnosis {
-    principal: string;
-    diagnosis2: string;
-    diagnosis3: string;
+    principal: {
+        diagnosis: string;
+        type: string;
+    };
+    diagnosis2: {
+        diagnosis: string;
+        type: string;
+    };
+    diagnosis3: {
+        diagnosis: string;
+        type: string;
+    };
 }
 
 export interface AppointmentForm {

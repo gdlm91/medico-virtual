@@ -115,7 +115,7 @@ const LabResults: React.FC<Props> = ({ data, onValuesChange, disabled }) => {
                     </Col>
                 </Row>
                 <Form.Item label="Observación" name={['lab', 'observations']}>
-                    <Input.TextArea autoSize={{ minRows: 5 }} />
+                    <Input.TextArea autoSize={{ minRows: 5 }} disabled={labDisabled} />
                 </Form.Item>
                 <Row justify="space-between">
                     <Col>

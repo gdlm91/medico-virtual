@@ -6,8 +6,9 @@ import useResponse, { Response } from './utils/useResponse';
 import createApiFn from './utils/createApiFn';
 
 interface AppointmentAPI {
-    changeStatus: (status: AppointmentStatusEnum) => void;
-    rescheduled: (date: string, time: string) => void;
+    changeStatus: (status: AppointmentStatusEnum) => Promise<void>;
+    rescheduled: (date: string, time: string) => Promise<void>;
+    closeAppointment: (diagnosis: string) => Promise<void>;
 }
 
 interface UseAppointment {
@@ -55,7 +56,19 @@ const useAppointment = (storyKey: string, appointmentKey: string): UseAppointmen
         setResponse,
     );
 
-    return { response, api: { changeStatus, rescheduled } };
+    const closeAppointment = createApiFn<Appointment>(
+        async (diagnosis: string) => {
+            if (!response.data) {
+                return;
+            }
+
+            return update<Appointment>(path, { ...response.data, diagnosis, status: AppointmentStatusEnum.closed });
+        },
+        response,
+        setResponse,
+    );
+
+    return { response, api: { changeStatus, rescheduled, closeAppointment } };
 };
 
 export default useAppointment;

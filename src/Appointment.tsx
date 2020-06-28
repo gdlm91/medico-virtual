@@ -166,7 +166,8 @@ const Appointment: React.FC<Props> = ({ storyKey = '', appointmentKey = '' }) =>
 
     const handleCloseAppointment = () => {
         if (appointmentResponse.data?.status !== AppointmentStatusEnum.closed) {
-            appointmentApi.changeStatus(AppointmentStatusEnum.closed);
+            const diagnosis = appointmentFormResponse.data?.diagnosis?.principal.diagnosis || '';
+            appointmentApi.closeAppointment(diagnosis);
         }
     };
 

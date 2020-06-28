@@ -31,7 +31,7 @@ const SelectList: React.FC<Props> = ({ options, name, label, disabled }) => {
                                     </Select>
                                 </Form.Item>
                             </Col>
-                            <Col span={12}>
+                            <Col flex="auto">
                                 <Form.Item label="Observación" name={[field.name, 'observation']}>
                                     <TextArea disabled={disabled} autoSize={{ minRows: 5, maxRows: 5 }} />
                                 </Form.Item>
