@@ -48,7 +48,7 @@ interface Props {
     onValuesChange?: (value: AppointmentForm) => void;
 }
 
-const FamilyHistory: React.FC<Props> = ({ data, onValuesChange }) => {
+const FamilyHistory: React.FC<Props> = ({ data, onValuesChange, disabled }) => {
     const transformedData = useMemo(() => {
         // We need to put the information inside an object for SelectList to work properly
         return data && ({ familyHistory: data } as AppointmentForm);
@@ -70,7 +70,12 @@ const FamilyHistory: React.FC<Props> = ({ data, onValuesChange }) => {
                 onValuesChange={handleOnValuesChange}
                 style={{ marginBottom: '30px' }}
             >
-                <SelectList name="familyHistory" label="Antecedente" options={FamilyHistoryOptions}></SelectList>
+                <SelectList
+                    name="familyHistory"
+                    label="Antecedente"
+                    options={FamilyHistoryOptions}
+                    disabled={disabled}
+                ></SelectList>
             </Form>
 
             <Table columns={columns} dataSource={fakeData} size="small" />

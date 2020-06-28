@@ -11,7 +11,7 @@ interface Props {
     onValuesChange?: (value: AppointmentForm) => void;
 }
 
-const AppointmentReason: React.FC<Props> = ({ data, onValuesChange }) => {
+const AppointmentReason: React.FC<Props> = ({ data, onValuesChange, disabled }) => {
     const wrappedCallback = useCallback(
         (values: Store) => {
             onValuesChange && onValuesChange({ reason: values as AppointmentFormReason });
@@ -22,12 +22,14 @@ const AppointmentReason: React.FC<Props> = ({ data, onValuesChange }) => {
 
     return (
         <Form form={formRef} layout="vertical" onValuesChange={handleOnValuesChange}>
-            <Form.Item label="Motivo de consulta" name="reason">
-                <Input.TextArea autoSize={{ minRows: 5, maxRows: 5 }} />
-            </Form.Item>
-            <Form.Item label="Enfermedad actual" name="sickness">
-                <Input.TextArea autoSize={{ minRows: 5, maxRows: 5 }} />
-            </Form.Item>
+            <fieldset disabled={disabled}>
+                <Form.Item label="Motivo de consulta" name="reason">
+                    <Input.TextArea autoSize={{ minRows: 5, maxRows: 5 }} />
+                </Form.Item>
+                <Form.Item label="Enfermedad actual" name="sickness">
+                    <Input.TextArea autoSize={{ minRows: 5, maxRows: 5 }} />
+                </Form.Item>
+            </fieldset>
         </Form>
     );
 };

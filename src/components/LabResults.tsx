@@ -45,7 +45,7 @@ const dataToStore = (data: AppointmentFormResults): Store => {
     };
 };
 
-const LabResults: React.FC<Props> = ({ data, onValuesChange }) => {
+const LabResults: React.FC<Props> = ({ data, onValuesChange, disabled }) => {
     const transformedData = useMemo(() => {
         return data && dataToStore(data);
     }, [data]);
@@ -101,36 +101,38 @@ const LabResults: React.FC<Props> = ({ data, onValuesChange }) => {
 
     return (
         <Form form={formRef} layout="vertical" onValuesChange={handleOnValuesChange}>
-            <Row justify="space-between">
-                <Col>
-                    <Checkbox onChange={toggleLabDisabled} checked={!labDisabled}>
-                        Trajos resultados de laboratorio
-                    </Checkbox>
-                </Col>
-                <Col>
-                    <Form.Item name={['lab', 'date']}>
-                        <DatePicker disabled={labDisabled} format="DD-MM-YYYY" />
-                    </Form.Item>
-                </Col>
-            </Row>
-            <Form.Item label="Observación" name={['lab', 'observations']}>
-                <Input.TextArea autoSize={{ minRows: 5 }} disabled={labDisabled} />
-            </Form.Item>
-            <Row justify="space-between">
-                <Col>
-                    <Checkbox onChange={toggleImagesDisabled} checked={!imagesDisabled}>
-                        Trajos resultados de imágenes
-                    </Checkbox>
-                </Col>
-                <Col>
-                    <Form.Item name={['images', 'date']}>
-                        <DatePicker disabled={imagesDisabled} format="DD-MM-YYYY" />
-                    </Form.Item>
-                </Col>
-            </Row>
-            <Form.Item label="Observación" name={['images', 'observations']}>
-                <Input.TextArea autoSize={{ minRows: 5 }} disabled={imagesDisabled} />
-            </Form.Item>
+            <fieldset disabled={disabled}>
+                <Row justify="space-between">
+                    <Col>
+                        <Checkbox onChange={toggleLabDisabled} checked={!labDisabled}>
+                            Trajos resultados de laboratorio
+                        </Checkbox>
+                    </Col>
+                    <Col>
+                        <Form.Item name={['lab', 'date']}>
+                            <DatePicker disabled={labDisabled} format="DD-MM-YYYY" />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Form.Item label="Observación" name={['lab', 'observations']}>
+                    <Input.TextArea autoSize={{ minRows: 5 }} disabled={labDisabled} />
+                </Form.Item>
+                <Row justify="space-between">
+                    <Col>
+                        <Checkbox onChange={toggleImagesDisabled} checked={!imagesDisabled}>
+                            Trajos resultados de imágenes
+                        </Checkbox>
+                    </Col>
+                    <Col>
+                        <Form.Item name={['images', 'date']}>
+                            <DatePicker disabled={imagesDisabled} format="DD-MM-YYYY" />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Form.Item label="Observación" name={['images', 'observations']}>
+                    <Input.TextArea autoSize={{ minRows: 5 }} disabled={imagesDisabled} />
+                </Form.Item>
+            </fieldset>
         </Form>
     );
 };

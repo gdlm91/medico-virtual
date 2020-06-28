@@ -13,7 +13,7 @@ interface Props {
     onValuesChange?: (value: AppointmentForm) => void;
 }
 
-const SelectDiagnosis: React.FC<{ label: string; name: string }> = ({ label, name }) => {
+const SelectDiagnosis: React.FC<{ label: string; name: string; disabled?: boolean }> = ({ label, name, disabled }) => {
     const [query, setQuery] = useState('');
     const [response] = useCie10(query);
 
@@ -39,7 +39,7 @@ const SelectDiagnosis: React.FC<{ label: string; name: string }> = ({ label, nam
             </Col>
             <Col span={6}>
                 <Form.Item label="&nbsp;" name={[name, 'type']}>
-                    <Select>
+                    <Select disabled={disabled}>
                         <Select.Option value="primera">Primera vez</Select.Option>
                         <Select.Option value="sucesiva">Sucesiva</Select.Option>
                         <Select.Option value="impresion">Impresión</Select.Option>
@@ -50,7 +50,7 @@ const SelectDiagnosis: React.FC<{ label: string; name: string }> = ({ label, nam
     );
 };
 
-const Diagnosis: React.FC<Props> = ({ data, onValuesChange }) => {
+const Diagnosis: React.FC<Props> = ({ data, onValuesChange, disabled }) => {
     const wrappedCallback = useCallback(
         (values: Store) => {
             onValuesChange && onValuesChange({ diagnosis: values as AppointmentDiagnosis });
@@ -68,13 +68,15 @@ const Diagnosis: React.FC<Props> = ({ data, onValuesChange }) => {
 
     return (
         <Form form={formRef} layout="vertical" onValuesChange={handleOnValuesChange}>
-            {Object.entries(fields).map(([name, label]) => (
-                <SelectDiagnosis key={name} label={label} name={name} />
-            ))}
+            <fieldset disabled={disabled}>
+                {Object.entries(fields).map(([name, label]) => (
+                    <SelectDiagnosis key={name} label={label} name={name} disabled={disabled} />
+                ))}
 
-            <Form.Item label="Observaciones" name="observaciones">
-                <TextArea autoSize={{ minRows: 5, maxRows: 5 }} />
-            </Form.Item>
+                <Form.Item label="Observaciones" name="observaciones">
+                    <TextArea autoSize={{ minRows: 5, maxRows: 5 }} />
+                </Form.Item>
+            </fieldset>
         </Form>
     );
 };

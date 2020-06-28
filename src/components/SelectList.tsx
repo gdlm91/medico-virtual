@@ -7,9 +7,10 @@ interface Props {
     options: { [key: string]: string };
     name: string;
     label: string;
+    disabled?: boolean;
 }
 
-const SelectList: React.FC<Props> = ({ options, name, label }) => {
+const SelectList: React.FC<Props> = ({ options, name, label, disabled }) => {
     const { Option } = Select;
     const { TextArea } = Input;
 
@@ -21,7 +22,7 @@ const SelectList: React.FC<Props> = ({ options, name, label }) => {
                         <Row gutter={16} key={field.key}>
                             <Col span={8}>
                                 <Form.Item label={label} name={[field.name, 'key']}>
-                                    <Select>
+                                    <Select disabled={disabled}>
                                         {Object.entries(options).map(([value, label]) => (
                                             <Option key={value} value={value}>
                                                 {label}
@@ -30,20 +31,20 @@ const SelectList: React.FC<Props> = ({ options, name, label }) => {
                                     </Select>
                                 </Form.Item>
                             </Col>
-                            <Col span={14}>
+                            <Col flex="auto">
                                 <Form.Item label="Observación" name={[field.name, 'observation']}>
-                                    <TextArea autoSize={{ minRows: 5, maxRows: 5 }} />
+                                    <TextArea disabled={disabled} autoSize={{ minRows: 5, maxRows: 5 }} />
                                 </Form.Item>
                             </Col>
                             <Col className="dynamic-delete-button">
-                                <Button type="dashed" danger onClick={() => remove(field.name)}>
+                                <Button type="dashed" disabled={disabled} danger onClick={() => remove(field.name)}>
                                     <DeleteOutlined />
                                 </Button>
                             </Col>
                         </Row>
                     ))}
 
-                    <Button block type="dashed" onClick={() => add()}>
+                    <Button block type="dashed" onClick={() => add()} disabled={disabled}>
                         <PlusOutlined /> Agregar
                     </Button>
                 </>
