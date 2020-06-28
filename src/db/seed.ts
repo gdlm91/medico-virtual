@@ -15,11 +15,14 @@ const getRamdomTimestamp = () => {
         chance().pickone(['00', '30']),
     ];
 
-    const dateString = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+    const dateString = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(
+        2,
+        '0',
+    )}/${date.getFullYear()}`;
     const time = `${hours}:${minutes}`;
     const timestamp = new Date(
         date.getFullYear(),
-        date.getMonth() + 1,
+        date.getMonth(),
         date.getDate(),
         Number.parseInt(hours),
         Number.parseInt(minutes),

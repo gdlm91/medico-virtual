@@ -45,12 +45,6 @@ function App() {
                                     <Menu.Item key="stories">
                                         <Link to="/stories">Historia</Link>
                                     </Menu.Item>
-                                    <Menu.Item key="users">
-                                        <Link to="/users">Usuarios</Link>
-                                    </Menu.Item>
-                                    <Menu.Item key="reports">
-                                        <Link to="/reports">Reportes</Link>
-                                    </Menu.Item>
                                 </Menu>
                             </Col>
                             <Col flex="auto"></Col>
