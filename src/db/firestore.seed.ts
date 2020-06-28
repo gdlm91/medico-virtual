@@ -1,17 +1,35 @@
 #!/usr/bin/env node
+import fs from 'fs';
+import dotenv from 'dotenv';
 import * as admin from 'firebase-admin';
 
-import config from './firestore.config';
 import * as serviceAccount from '../../service-account.json';
 import { SeedStory, generateSeed } from './seed';
 import { Entities, Appointment } from '../types';
 
+dotenv.config();
+
+try {
+    const localDotEnv = dotenv.parse(fs.readFileSync('.env.local'));
+    for (const k in localDotEnv) {
+        process.env[k] = localDotEnv[k];
+    }
+} catch (error) {}
+
 const app = admin.initializeApp({
     credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-    ...config,
+    databaseURL: process.env.REACT_APP_DATABASEURL,
+    projectId: process.env.REACT_APP_PROJECTID,
 });
 
 const db = app.firestore();
+
+if (process.env.REACT_APP_LOCAL) {
+    db.settings({
+        host: 'localhost:8080',
+        ssl: false,
+    });
+}
 
 const storiesColRef = db.collection(Entities.stories);
 const appointmentsColGroupRef = db.collectionGroup(Entities.appointments);

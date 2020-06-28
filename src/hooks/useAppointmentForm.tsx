@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { get, update, createIfUndefined } from '../db/firestore.db';
+import { get, update, createIfUndefined } from '../db/firebase.db';
 import { Entities, AppointmentForm } from '../types';
 import useResponse, { Response } from './utils/useResponse';
 import createApiFn from './utils/createApiFn';

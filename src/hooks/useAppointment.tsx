@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { get, update } from '../db/firestore.db';
+import { get, update } from '../db/firebase.db';
 import { Entities, Appointment, AppointmentStatusEnum } from '../types';
 import useResponse, { Response } from './utils/useResponse';
 import createApiFn from './utils/createApiFn';
