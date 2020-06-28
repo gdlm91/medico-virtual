@@ -12,6 +12,7 @@ export const Default = () => {
     const appointments: Appointment[] = [
         {
             $key: '111',
+            name: 'Fake name',
             $path: '',
             date: '01-01-2019',
             status: AppointmentStatusEnum.closed,
@@ -21,6 +22,7 @@ export const Default = () => {
         },
         {
             $key: '111',
+            name: 'Fake name',
             $path: '',
             date: '01-01-2019',
             status: AppointmentStatusEnum.closed,
@@ -30,6 +32,7 @@ export const Default = () => {
         },
         {
             $key: '111',
+            name: 'Fake name',
             $path: '',
             date: '01-01-2019',
             status: AppointmentStatusEnum.closed,
@@ -39,6 +42,7 @@ export const Default = () => {
         },
         {
             $key: '222',
+            name: 'Fake name',
             $path: '',
             date: '25-01-2019',
             status: AppointmentStatusEnum.cancelled,
@@ -47,6 +51,7 @@ export const Default = () => {
         },
         {
             $key: '222',
+            name: 'Fake name',
             $path: '',
             date: '01-02-2019',
             status: AppointmentStatusEnum.open,

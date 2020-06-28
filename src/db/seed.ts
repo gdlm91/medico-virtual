@@ -44,13 +44,14 @@ const generatePatient = (): Patient => ({
     job: chance().profession(),
 });
 
-const generateAppointment = (): Appointment => {
+const generateAppointment = (patient: Patient): Appointment => {
     const diagnosis = chance().bool({ likelihood: 70 }) && chance().sentence();
     const { date, time, timestamp } = getRamdomTimestamp();
 
     const appointment: Appointment = {
         $key: 'fake',
         $path: 'fake',
+        name: patient.name,
         status: diagnosis
             ? AppointmentStatusEnum.closed
             : chance().pickone([
@@ -73,7 +74,7 @@ const generateAppointment = (): Appointment => {
 
 export const generateSeed = (appointmentsCount = 10): SeedStory => {
     const patient = generatePatient();
-    const appointments = Array.from({ length: appointmentsCount }).map(() => generateAppointment());
+    const appointments = Array.from({ length: appointmentsCount }).map(() => generateAppointment(patient));
 
     return {
         $key: 'fake',

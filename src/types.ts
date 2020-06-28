@@ -98,6 +98,7 @@ export enum AppointmentStatusEnum {
 export interface Appointment {
     $key: string;
     $path: string;
+    name: string;
     date: string;
     time: string;
     diagnosis?: string;

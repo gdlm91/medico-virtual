@@ -1,0 +1,17 @@
+.agenda {
+    display: grid;
+    grid-auto-flow: column;
+}
+
+.day {
+    grid-template-columns: 100px auto;
+}
+
+.week {
+    grid-template-columns: 100px repeat(7, 1fr);
+}
+
+.agenda > * {
+    height: 100px;
+    border: 1px solid grey;
+}
