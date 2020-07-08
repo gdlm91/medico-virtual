@@ -26,7 +26,7 @@ const db = app.firestore();
 
 if (process.env.REACT_APP_LOCAL) {
     db.settings({
-        host: 'localhost:8080',
+        host: 'localhost:5002',
         ssl: false,
     });
 }
