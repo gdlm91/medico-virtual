@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { eachDayOfInterval, format } from 'date-fns';
 
 import { Appointment } from '../types';
@@ -82,10 +82,13 @@ interface AgendaEntriesProps {
 }
 
 const AgendaEntries: React.FC<AgendaEntriesProps> = ({ date, entries, mode = 'day' }) => {
-    const timetable = generateTimetable('08:00', '17:00');
-    const gridRowCount = {
-        gridTemplateRows: `repeat(${timetable.length + 1}, auto)`,
-    };
+    const timetable = useMemo(() => generateTimetable('08:00', '17:00'), []);
+    const gridRowCount = useMemo(
+        () => ({
+            gridTemplateRows: `repeat(${timetable.length + 1}, auto)`,
+        }),
+        [],
+    );
 
     return (
         <div className={`${styles.agenda} ${styles[mode]}`} style={gridRowCount}>
