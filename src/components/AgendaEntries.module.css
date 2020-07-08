@@ -11,10 +11,6 @@
     grid-template-columns: 100px repeat(7, 1fr);
 }
 
-.agenda {
-    /* margin-bottom: 25px; */
-}
-
 .agendaTime {
     border-top: 1px solid #d9d9d9;
 }
@@ -39,9 +35,18 @@
 }
 
 .agendaSlot {
-    min-height: 100px;
+    min-height: 60px;
     border-left: 1px solid #d9d9d9;
     border-top: 1px solid #d9d9d9;
+}
+
+.agendaItem {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 150px;
+    margin: 5px;
+    display: block;
+    overflow: hidden;
 }
 
 .agendaLastSlot {

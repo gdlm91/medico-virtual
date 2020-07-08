@@ -5,6 +5,7 @@ import { Appointment } from '../types';
 import styles from './AgendaEntries.module.css';
 import getWeekFromDate from '../hooks/utils/getWeekFromDate';
 import moment, { Moment } from 'moment';
+import { Tag } from 'antd';
 
 type Timetable = string[];
 
@@ -62,7 +63,9 @@ const DayEntry: React.FC<EntryProps> = ({ date, entries, timetable }) => {
                     }`}
                 >
                     {group.entries.map((entry) => (
-                        <p key={entry.$key}>{entry.name}</p>
+                        <Tag className={styles.agendaItem} key={entry.$key} title={entry.name}>
+                            {entry.name}
+                        </Tag>
                     ))}
                 </div>
             ))}
