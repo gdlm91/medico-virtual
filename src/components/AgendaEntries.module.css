@@ -11,7 +11,40 @@
     grid-template-columns: 100px repeat(7, 1fr);
 }
 
-.agenda > * {
-    height: 100px;
-    border: 1px solid grey;
+.agenda {
+    /* margin-bottom: 25px; */
+}
+
+.agendaTime {
+    border-top: 1px solid #d9d9d9;
+}
+
+.agendaTime > h4 {
+    background-color: #fff;
+    /* margin-top: -12px; */
+    padding-right: 15px;
+    display: inline-block;
+    position: relative;
+    top: -13px;
+    /* color: #d9d9d9; */
+    font-weight: normal;
+}
+
+.agendaHeader > h4 {
+    font-weight: normal;
+}
+
+.agendaDate {
+    font-size: xx-large;
+}
+
+.agendaSlot {
+    min-height: 100px;
+    border-left: 1px solid #d9d9d9;
+    border-top: 1px solid #d9d9d9;
+}
+
+.agendaLastSlot {
+    border-left: none;
+    min-height: 25px;
 }

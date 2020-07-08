@@ -4,6 +4,7 @@ import { eachDayOfInterval, format } from 'date-fns';
 import { Appointment } from '../types';
 import styles from './AgendaEntries.module.css';
 import getWeekFromDate from '../hooks/utils/getWeekFromDate';
+import moment, { Moment } from 'moment';
 
 type Timetable = string[];
 
@@ -31,24 +32,35 @@ const generateTimetable = (fromTime: string, toTime: string) => {
 };
 
 interface EntryProps {
-    date: Date;
+    date: Moment;
     entries: Appointment[];
     timetable: Timetable;
 }
 
 const DayEntry: React.FC<EntryProps> = ({ date, entries, timetable }) => {
-    const groupedEntreis = timetable.map((time) => ({
-        time,
-        entries: entries.filter((entry) => entry.time === time),
-    }));
+    const groupedEntreis = useMemo(
+        () =>
+            timetable.map((time) => ({
+                time,
+                entries: entries.filter((entry) => entry.time === time),
+            })),
+        [entries, timetable],
+    );
 
     return (
         <>
-            <div>
-                <h4>{date.getDate()}</h4>
+            <div className={styles.agendaHeader}>
+                <h4>
+                    <span className={styles.agendaDate}>{date.format('DD')}</span> {date.localeData().weekdays(date)}
+                </h4>
             </div>
-            {groupedEntreis.map((group) => (
-                <div key={group.time}>
+            {groupedEntreis.map((group, index) => (
+                <div
+                    key={group.time}
+                    className={`${styles.agendaSlot} ${
+                        index === groupedEntreis.length - 1 ? styles.agendaLastSlot : ''
+                    }`}
+                >
                     {group.entries.map((entry) => (
                         <p key={entry.$key}>{entry.name}</p>
                     ))}
@@ -59,12 +71,16 @@ const DayEntry: React.FC<EntryProps> = ({ date, entries, timetable }) => {
 };
 
 const WeekEntry: React.FC<EntryProps> = ({ date, entries, timetable }) => {
-    const { dateStart, dateEnd } = getWeekFromDate(date);
-    const datesOfWeek = eachDayOfInterval({ start: dateStart, end: dateEnd });
-    const groupedEntries = datesOfWeek.map((dateOfWeek) => ({
-        date: dateOfWeek,
-        entries: entries.filter((entry) => entry.date === format(dateOfWeek, 'dd/MM/yyyy')),
-    }));
+    const { dateStart, dateEnd } = useMemo(() => getWeekFromDate(date.toDate()), [date]);
+    const datesOfWeek = useMemo(() => eachDayOfInterval({ start: dateStart, end: dateEnd }), [dateStart, dateEnd]);
+    const groupedEntries = useMemo(
+        () =>
+            datesOfWeek.map((dateOfWeek) => ({
+                date: moment(dateOfWeek),
+                entries: entries.filter((entry) => entry.date === format(dateOfWeek, 'dd/MM/yyyy')),
+            })),
+        [datesOfWeek],
+    );
 
     return (
         <>
@@ -76,7 +92,7 @@ const WeekEntry: React.FC<EntryProps> = ({ date, entries, timetable }) => {
 };
 
 interface AgendaEntriesProps {
-    date: Date;
+    date: Moment;
     entries: Appointment[];
     mode?: string;
 }
@@ -92,9 +108,12 @@ const AgendaEntries: React.FC<AgendaEntriesProps> = ({ date, entries, mode = 'da
 
     return (
         <div className={`${styles.agenda} ${styles[mode]}`} style={gridRowCount}>
-            <div>Hora</div>
-            {timetable.map((time) => (
-                <div className={styles.agendaTime} key={time}>
+            <div className={styles.agendaHeader}></div>
+            {timetable.map((time, index) => (
+                <div
+                    className={`${styles.agendaTime} ${index === timetable.length - 1 ? styles.agendaLastSlot : ''}`}
+                    key={time}
+                >
                     <h4>{time}</h4>
                 </div>
             ))}
